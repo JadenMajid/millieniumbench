@@ -51,6 +51,11 @@
       "summary": "Prove that every non-trivial zero of the analytic continuation of the Riemann zeta function lies on the critical line Re(s) = 1/2. Claimed in Nov 2026 (Alpöge + Claude); awaiting CMI's 2-year review.",
       "statement": "The Riemann zeta function ζ(s) = ∑(n=1 to ∞) n⁻ˢ for Re(s) > 1 extends meromorphically to ℂ with a single simple pole at s = 1. Prove that all zeros of ζ(s) in the critical strip 0 < Re(s) < 1 satisfy Re(s) = 1/2.",
       "breakthrough": "Nov 20, 2026 — Levent Alpöge (Anthropic) with Claude released a ~17M-line Lean 4 / Mathlib library (175,187 files) proving both RH and GRH for Dirichlet L-functions. The Lean FRO, Mathlib Initiative, and independent checkers (con-leche, con-ron) verified compilation against Mathlib's native `RiemannHypothesis` with zero `sorry`. Official CMI prize recognition still requires peer-reviewed publication and 2 years of community scrutiny.",
+      "proofLinks": [
+        { "label": "Alpöge Remark (PDF)", "url": "https://alpo.ge/remark.pdf" },
+        { "label": "Proof Archive (alpo.ge)", "url": "https://alpo.ge/" },
+        { "label": "Lean / Mathlib Blog", "url": "https://leanprover-community.github.io/blog/" }
+      ],
       "tiers": {
         "formalization": "Formalize the Euler product, functional equation ξ(s) = ξ(1 - s), and Hadamard–de la Vallée Poussin zero-free region.",
         "milestones": "Prove equivalence to Lagarias's elementary inequality, Robin's criterion, and Hardy's theorem on infinitely many critical-line zeros.",
@@ -77,6 +82,9 @@
       "summary": "Construct a rigorous 4D quantum Yang–Mills theory for any compact simple gauge group G with mass gap Δ > 0. OpenAI released a Lean 4 existence proof in Oct–Nov 2026; the mass gap Δ > 0 remains open.",
       "statement": "Prove that for any compact simple gauge group G, a non-trivial quantum Yang–Mills theory exists on ℝ⁴ and has a mass gap Δ > 0, establishing a rigorous axiomatic quantum field theory satisfying Wightman or Osterwalder–Schrader axioms.",
       "breakthrough": "Oct 26 / Nov 2026 — OpenAI announced a Lean-formalized 4D Yang–Mills & QCD existence proof (`OpenAI-YM-20261028`), shepherded and released by an independent committee chaired by Nobel laureate David J. Gross (with Arthur Jaffe, Michael R. Douglas, Igor R. Klebanov, and Nikita Nekrasov). Because the mass gap (Δ > 0) remains unproven, the full Millennium Prize problem stays open.",
+      "proofLinks": [
+        { "label": "GitHub (OpenAI-YM-20261028)", "url": "https://github.com/yang-mills-group/OpenAI-YM-20261028" }
+      ],
       "tiers": {
         "formalization": "Formalize principal G-bundles, Yang–Mills curvature functionals, lattice gauge Wilson action, and reflection positivity.",
         "milestones": "Reproduce 2D Yang–Mills exact solvability, Balaban's renormalization group estimates on finite lattices, and 4D existence construction.",
@@ -103,6 +111,11 @@
       "summary": "Prove global smoothness or finite-time blowup for 3D incompressible Navier–Stokes. In Sep 2026 OpenAI published a Lean 4 forced blowup proof (Fefferman Alternatives C & D); NL-to-Lean audit and unforced (f = 0) case remain active.",
       "statement": "Given smooth, rapidly decaying divergence-free initial velocity u₀ on ℝ³ (or 𝕋³) and viscosity ν > 0, prove either global existence and smoothness (Fefferman Alternatives A/B) or finite-time breakdown with smooth initial data and smooth external force f (Alternatives C/D).",
       "breakthrough": "Sep 8, 2026 — OpenAI's internal multi-agent system (~10,000 agents, 88h) released a 166-page proof + Lean 4 formalization of finite-time blowup from rest with a smooth compactly supported force f (targeting Fefferman Alternatives C & D). The Lean kernel compiled cleanly, though researchers are auditing natural-language-to-Lean boundary/cutoff fidelity, OpenAI declined to claim the CMI prize, and the unforced (f = 0) problem remains open.",
+      "proofLinks": [
+        { "label": "OpenAI Announcement", "url": "https://openai.com/index/navier-stokes-solution/" },
+        { "label": "166-Page Proof (PDF)", "url": "https://cdn.openai.com/pdf/32d9f210-8b73-45e0-91bc-82a30aef8a9a/navier-stokes.pdf" },
+        { "label": "GitHub Repo", "url": "https://github.com/openai/NavierStokesAndEuler" }
+      ],
       "tiers": {
         "formalization": "Formalize Sobolev spaces Hˢ(ℝ³), Leray–Hopf weak solutions, Helmholtz projection, and energy inequalities.",
         "milestones": "Reproduce 2D global regularity, Ladyzhenskaya–Prodi–Serrin criteria, Beale–Kato–Majda vorticity blowup criterion, and forced singularity constructions.",
@@ -181,6 +194,11 @@
       "summary": "Every simply connected, closed 3-manifold is homeomorphic to the 3-sphere. Remains the only Millennium Prize Problem officially resolved by CMI and serves as MillieniumBench's ground-truth control task.",
       "statement": "If a compact 3-dimensional manifold M³ without boundary has the property that every simple closed curve within the manifold can be continuously deformed to a point, then M³ is homeomorphic to the 3-sphere S³. Solved by Grigori Perelman (2002–2003) via Hamilton's Ricci flow with surgery.",
       "breakthrough": "Solved by Grigori Perelman (2002–2003); formally verified by the mathematical community and awarded the Clay Millennium Prize in 2010 (Perelman declined the award).",
+      "proofLinks": [
+        { "label": "Perelman I (arXiv:math/0211159)", "url": "https://arxiv.org/abs/math/0211159" },
+        { "label": "Perelman II (arXiv:math/0303109)", "url": "https://arxiv.org/abs/math/0303109" },
+        { "label": "Perelman III (arXiv:math/0307245)", "url": "https://arxiv.org/abs/math/0307245" }
+      ],
       "tiers": {
         "formalization": "Formalize Riemannian metrics, Ricci curvature tensor, Hamilton's Ricci flow PDE, and Perelman's W-entropy functional.",
         "milestones": "Prove no local collapsing theorem, canonical neighborhood theorem, finite-time extinction for simply connected 3-manifolds.",
@@ -201,6 +219,11 @@
       "cmiVerifiedCount": 0,
       "verificationSummary": "Pending CMI 2-year peer review",
       "milestoneLabel": "Riemann Hypothesis & GRH",
+      "proofLinks": [
+        { "label": "Remark (PDF)", "url": "https://alpo.ge/remark.pdf" },
+        { "label": "Archive", "url": "https://alpo.ge/" },
+        { "label": "Lean / Mathlib Blog", "url": "https://leanprover-community.github.io/blog/" }
+      ],
       "highlights": "Nov 20, 2026: Used with mathematician Levent Alpöge to publish a claimed proof of both the Riemann Hypothesis and Generalized Riemann Hypothesis (GRH), accompanied by a ~17M-line formal library. Anthropic did not disclose which internal Claude checkpoint was used; official CMI verification awaits peer-reviewed publication and a 2-year scrutiny window.",
       "problems": {
         "p-vs-np": { "label": "—", "state": "none" },
@@ -222,6 +245,12 @@
       "cmiVerifiedCount": 0,
       "verificationSummary": "Forced NS under review · YM mass gap open",
       "milestoneLabel": "Navier–Stokes (Forced) · Yang–Mills (Partial)",
+      "proofLinks": [
+        { "label": "NS Post", "url": "https://openai.com/index/navier-stokes-solution/" },
+        { "label": "NS Paper (PDF)", "url": "https://cdn.openai.com/pdf/32d9f210-8b73-45e0-91bc-82a30aef8a9a/navier-stokes.pdf" },
+        { "label": "NS GitHub", "url": "https://github.com/openai/NavierStokesAndEuler" },
+        { "label": "YM GitHub", "url": "https://github.com/yang-mills-group/OpenAI-YM-20261028" }
+      ],
       "highlights": "OpenAI's flagship frontier model (`gpt-6.2-astra`) and its internal predecessor checkpoint. Sep 8, 2026: Claimed a 166-page finite-time blowup proof for 3D Navier–Stokes with a smooth external force targeting Fefferman Alternatives (C) & (D) (under community review; unforced f = 0 case open). Oct 26 / Nov 10, 2026: Released a 4D Yang–Mills / QCD existence proof shepherded by David J. Gross's committee (mass gap Δ > 0 remains open).",
       "problems": {
         "p-vs-np": { "label": "—", "state": "none" },
