@@ -65,6 +65,25 @@
     return "badge-unsolved";
   }
 
+  function proofLinksHtml(links, compact = false) {
+    if (!Array.isArray(links) || links.length === 0) return "";
+    return `
+      <div class="proof-links ${compact ? "proof-links-compact" : ""}">
+        ${links
+          .map(
+            (item) => `
+          <a
+            href="${escapeHtml(item.url)}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="proof-link"
+          >${escapeHtml(item.label)} ↗</a>`
+          )
+          .join("")}
+      </div>
+    `;
+  }
+
   function matrixCellHtml(cell) {
     if (!cell || cell.state === "none") {
       return `<span class="matrix-empty">—</span>`;
@@ -223,6 +242,7 @@
                 <div class="model-cell">
                   <span style="font-weight:500; color:var(--ink);">${escapeHtml(m.milestoneLabel)}</span>
                   <span class="model-org">${escapeHtml(m.verificationSummary)}</span>
+                  ${proofLinksHtml(m.proofLinks, true)}
                 </div>
               </td>
               <td class="col-num" style="font-family:var(--font-mono); color:var(--ink-secondary); white-space:nowrap;">${escapeHtml(m.date)}</td>
@@ -233,8 +253,12 @@
 
       $$("tr[data-model-id]", tbody).forEach((row) => {
         const open = () => openModelModal(row.dataset.modelId);
-        row.addEventListener("click", open);
+        row.addEventListener("click", (e) => {
+          if (e.target.closest("a")) return;
+          open();
+        });
         row.addEventListener("keydown", (e) => {
+          if (e.target.closest("a")) return;
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             open();
@@ -323,6 +347,7 @@
               ${escapeHtml(p.formulaPlain)}
             </div>
             <p class="problem-summary">${escapeHtml(p.summary)}</p>
+            ${proofLinksHtml(p.proofLinks, true)}
             <div class="problem-footer">
               <span>Status: <strong class="problem-sota">${escapeHtml(p.aiStatusSummary)}</strong></span>
               <span class="problem-inspect">Inspect →</span>
@@ -336,8 +361,12 @@
 
     $$(".problem-card", grid).forEach((card) => {
       const open = () => openProblemModal(card.dataset.problemId);
-      card.addEventListener("click", open);
+      card.addEventListener("click", (e) => {
+        if (e.target.closest("a")) return;
+        open();
+      });
       card.addEventListener("keydown", (e) => {
+        if (e.target.closest("a")) return;
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           open();
@@ -380,6 +409,7 @@
         <div class="breakthrough-callout ${p.statusType === "ai-verified" || p.statusType === "solved" ? "verified" : ""}">
           ${formatInlineCode(p.breakthrough)}
         </div>
+        ${proofLinksHtml(p.proofLinks)}
       </div>`
       : "";
 
@@ -393,7 +423,7 @@
 
       ${breakthroughBlock}
 
-      <div class="problem-formula math-render" data-latex="${escapeHtml(p.formulaLatex)}" data-display="true" style="padding:16px;">
+      <div class="problem-formula math-render" data-latex="${escapeHtml(p.formulaLatex)}" data-display="true">
         ${escapeHtml(p.formulaPlain)}
       </div>
 
@@ -488,6 +518,7 @@
       <div>
         <div class="modal-section-label">Verification Details &amp; Public Record</div>
         <p style="margin:0; font-size:0.92rem; color:var(--ink-secondary);">${formatInlineCode(m.highlights)}</p>
+        ${proofLinksHtml(m.proofLinks)}
       </div>
 
       <div>
@@ -708,7 +739,7 @@
 
   async function loadData() {
     try {
-      const resp = await fetch("data/benchmark.json?v=0.2.1", { cache: "no-store" });
+      const resp = await fetch("data/benchmark.json?v=0.2.2", { cache: "no-store" });
       if (!resp.ok) throw new Error("HTTP error");
       return await resp.json();
     } catch (_) {
