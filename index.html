@@ -40,7 +40,7 @@
     crossorigin="anonymous"
   ></script>
 
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=0.2.1" />
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -65,9 +65,6 @@
       <nav class="site-nav" aria-label="Primary">
         <a href="#leaderboard">Leaderboard</a>
         <a href="#problems">7 Problems</a>
-        <a href="#methodology">Methodology</a>
-        <a href="#submit">Submit</a>
-        <a href="#cite">Cite</a>
       </nav>
 
       <div class="header-actions">
@@ -119,9 +116,6 @@
     <div class="mobile-drawer" id="mobile-drawer" hidden>
       <a href="#leaderboard">Leaderboard</a>
       <a href="#problems">7 Millennium Problems</a>
-      <a href="#methodology">Methodology</a>
-      <a href="#submit">Submit Model</a>
-      <a href="#cite">Citation</a>
       <a href="https://github.com/JadenMajid/millieniumbench" target="_blank" rel="noopener noreferrer">GitHub Repository ↗</a>
     </div>
   </header>
@@ -133,7 +127,7 @@
       <div class="container hero-content">
         <div class="hero-eyebrow">
           <span class="pulse-dot" aria-hidden="true"></span>
-          <span>Open-Source Mathematical Frontier Evaluation · Lean 4.14 Harness</span>
+          <span>Open-Source Mathematical Frontier Benchmark</span>
         </div>
 
         <h1 class="hero-title">
@@ -142,10 +136,9 @@
         </h1>
 
         <p class="hero-subtitle">
-          <strong>MillieniumBench</strong> is a formally verified benchmark testing frontier AI systems
-          and automated theorem provers on humanity’s deepest open mathematical challenges—spanning
-          prerequisite formalization, known barrier proofs, adversarial flaw detection, and the six
-          unsolved $1,000,000 conjectures.
+          <strong>MillieniumBench</strong> tracks frontier AI models against humanity’s deepest
+          open mathematical challenges—the seven $1,000,000 Millennium Prize Problems posed by the
+          Clay Mathematics Institute.
         </p>
 
         <div class="hero-actions">
@@ -156,29 +149,28 @@
             </svg>
           </a>
           <a href="#problems" class="btn btn-secondary">Inspect the 7 Problems</a>
-          <a href="#submit" class="btn btn-ghost">Submit a Model via PR</a>
         </div>
 
         <div class="hero-stats" role="list" aria-label="Benchmark key statistics">
           <div class="stat-card" role="listitem">
             <span class="stat-label">Clay Problems</span>
             <span class="stat-value">7</span>
-            <span class="stat-meta">1 CMI solved · 6 open prizes</span>
+            <span class="stat-meta">1 CMI verified · 6 open prizes</span>
           </div>
           <div class="stat-card" role="listitem">
-            <span class="stat-label">Lean-Verified AI Proofs</span>
-            <span class="stat-value accent-teal">1</span>
-            <span class="stat-meta">Riemann Hypothesis · Pending CMI review</span>
+            <span class="stat-label">Claimed by AI</span>
+            <span class="stat-value gold-text">2 / 6</span>
+            <span class="stat-meta">Riemann · Navier–Stokes (Forced)</span>
           </div>
           <div class="stat-card" role="listitem">
-            <span class="stat-label">Claimed / Partial AI</span>
-            <span class="stat-value gold-text">2</span>
-            <span class="stat-meta">Navier–Stokes (Forced) · Yang–Mills (Exist.)</span>
-          </div>
-          <div class="stat-card" role="listitem">
-            <span class="stat-label">CMI Prizes Pending</span>
-            <span class="stat-value">$6M</span>
+            <span class="stat-label">CMI Verified (AI)</span>
+            <span class="stat-value accent-crimson">0 / 6</span>
             <span class="stat-meta">Official award requires 2-yr peer review</span>
+          </div>
+          <div class="stat-card" role="listitem">
+            <span class="stat-label">CMI Prizes Remaining</span>
+            <span class="stat-value">$6M</span>
+            <span class="stat-meta">$1,000,000 per open problem</span>
           </div>
         </div>
       </div>
@@ -202,13 +194,14 @@
         </div>
 
         <p class="section-lead">
-          Models are evaluated in a kernel-checked Lean 4 environment across all seven Clay
-          Millennium Prize Problems. As of <strong>November 2026</strong>, AI-assisted systems have
-          announced major Lean 4 breakthroughs on the <strong>Riemann Hypothesis</strong>
-          (Alpöge–Claude, Lean FRO &amp; Mathlib verified) and forced <strong>Navier–Stokes</strong>
-          finite-time blowup (OpenAI, Fefferman Alternatives C/D), plus 4D <strong>Yang–Mills</strong>
-          existence (OpenAI, mass gap still open). Under Clay Mathematics Institute rules, official
-          prizes remain pending peer-reviewed publication and a mandatory two-year scrutiny window.
+          Tracking frontier AI models on the seven Clay Millennium Prize Problems across two
+          clear statuses: <strong>Claimed</strong> (publicly announced proof or resolution) and
+          <strong>CMI Verified</strong> (officially accepted by the Clay Mathematics Institute
+          after peer-reviewed publication and its mandatory two-year scrutiny window). As of
+          <strong>November 2026</strong>, claimed AI breakthroughs exist for the
+          <strong>Riemann Hypothesis</strong> (Claude) and forced <strong>Navier–Stokes</strong>
+          blowup plus partial <strong>Yang–Mills</strong> existence (GPT-6.2 Astra), with
+          <strong>0 / 6</strong> officially verified by CMI so far.
         </p>
 
         <!-- Controls Toolbar -->
@@ -217,11 +210,11 @@
             <button type="button" class="tab-btn active" data-track="all" role="tab" aria-selected="true">
               All Models
             </button>
-            <button type="button" class="tab-btn" data-track="verified" role="tab" aria-selected="false">
-              Lean-Verified Full Proofs
-            </button>
             <button type="button" class="tab-btn" data-track="claimed" role="tab" aria-selected="false">
-              Claimed / Partial
+              Claimed
+            </button>
+            <button type="button" class="tab-btn" data-track="cmi" role="tab" aria-selected="false">
+              CMI Verified
             </button>
             <button type="button" class="tab-btn" data-track="open" role="tab" aria-selected="false">
               No Proof Yet (0 / 6)
@@ -266,9 +259,8 @@
                   <th class="col-rank">#</th>
                   <th class="sortable" data-sort="name">Model</th>
                   <th class="sortable" data-sort="organization">Provider</th>
-                  <th class="sortable col-num" data-sort="leanVerifiedCount">Lean-Verified</th>
-                  <th class="sortable col-num" data-sort="claimedPartialCount">Claimed / Partial</th>
-                  <th class="col-num">CMI Awarded</th>
+                  <th class="sortable col-num" data-sort="claimedCount">Claimed</th>
+                  <th class="sortable col-num" data-sort="cmiVerifiedCount">CMI Verified</th>
                   <th>Key Milestone</th>
                   <th class="sortable col-num" data-sort="date">Date</th>
                 </tr>
@@ -307,8 +299,8 @@
             </table>
           </div>
           <div class="table-footer">
-            <span>★ Poincaré Conjecture is the CMI-solved control problem (Grigori Perelman, 2003).</span>
-            <span>Status: Lean-Verified · Claimed · Partial · —</span>
+            <span>★ Poincaré Conjecture is the CMI-verified control problem (Grigori Perelman, 2003).</span>
+            <span>Status: CMI Verified · Claimed · Partial · —</span>
           </div>
         </div>
       </div>
@@ -324,9 +316,9 @@
           </div>
           <div class="filter-pills" id="problem-filters" role="group" aria-label="Filter problems by field">
             <button type="button" class="pill active" data-problem-filter="all">All (7)</button>
-            <button type="button" class="pill" data-problem-filter="breakthrough">2026 AI Breakthroughs (3)</button>
+            <button type="button" class="pill" data-problem-filter="breakthrough">Claimed / Partial (3)</button>
             <button type="button" class="pill" data-problem-filter="unsolved">Unsolved (3)</button>
-            <button type="button" class="pill" data-problem-filter="solved">CMI Solved (1)</button>
+            <button type="button" class="pill" data-problem-filter="solved">CMI Verified (1)</button>
             <button type="button" class="pill" data-problem-filter="number-theory">Number Theory</button>
             <button type="button" class="pill" data-problem-filter="physics-pde">Physics &amp; PDEs</button>
             <button type="button" class="pill" data-problem-filter="geometry-topology">Geometry</button>
@@ -345,206 +337,6 @@
         </div>
       </div>
     </section>
-
-    <!-- Evaluation Methodology -->
-    <section class="section" id="methodology">
-      <div class="container">
-        <div class="section-header">
-          <div>
-            <span class="section-kicker">03 · Evaluation Protocol</span>
-            <h2 class="section-title">How MillieniumBench Scores Progress</h2>
-          </div>
-        </div>
-
-        <p class="section-lead">
-          Evaluating AI on unsolved conjectures requires preventing hallucinated "proofs" while
-          still measuring genuine mathematical capability. MillieniumBench pairs strict machine
-          verification with four graded evaluation tiers.
-        </p>
-
-        <div class="pipeline-grid">
-          <article class="pipeline-card">
-            <span class="step-num">Stage 1</span>
-            <h3>Formalization Foundations</h3>
-            <p>
-              Core definitions, spaces, and target theorem statements are anchored to standard
-              <code>Mathlib4</code> definitions with zero <code>sorry</code> placeholders or custom axioms.
-            </p>
-          </article>
-          <article class="pipeline-card">
-            <span class="step-num">Stage 2</span>
-            <h3>Independent Kernel Check</h3>
-            <p>
-              Submitted proof libraries must compile cleanly under the official Lean 4 kernel and
-              independent third-party checkers (e.g., <em>con-leche</em>, <em>con-ron</em>).
-            </p>
-          </article>
-          <article class="pipeline-card">
-            <span class="step-num">Stage 3</span>
-            <h3>Statement Fidelity Audit</h3>
-            <p>
-              Mathematicians audit natural-language-to-Lean alignment—ensuring boundary conditions,
-              forcing terms, and definitions faithfully match the Clay Mathematics Institute statement.
-            </p>
-          </article>
-          <article class="pipeline-card">
-            <span class="step-num">Stage 4</span>
-            <h3>CMI 2-Year Peer Review</h3>
-            <p>
-              Under Clay Mathematics Institute rules, official resolution requires publication in a
-              peer-reviewed venue and two years of global mathematical community acceptance.
-            </p>
-          </article>
-        </div>
-
-        <div class="formula-banner">
-          <div class="formula-banner-label">Verification Standards</div>
-          <div class="verification-rules" style="padding-top: 6px;">
-            <span><strong>Zero-Axiom Rule:</strong> Custom axioms or <code>sorry</code> auto-fail kernel checks.</span>
-            <span><strong>Fidelity Check:</strong> Machine compilation alone does not replace statement-alignment review.</span>
-            <span><strong>No Synthetic Scores:</strong> Only publicly verifiable real-world attempts appear on the board.</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Submit / Quickstart Section -->
-    <section class="section section-alt" id="submit">
-      <div class="container">
-        <div class="section-header">
-          <div>
-            <span class="section-kicker">04 · Open Source &amp; Contributions</span>
-            <h2 class="section-title">Run the Harness &amp; Submit via GitHub</h2>
-          </div>
-        </div>
-
-        <div class="submit-layout">
-          <div class="submit-info">
-            <p>
-              MillieniumBench is hosted openly on GitHub. Researchers, labs, and independent
-              mathematicians can evaluate any LLM or formal prover locally and submit verified
-              traces via Pull Request.
-            </p>
-            <ul class="checklist">
-              <li>Pinned <code>Lean 4</code> + <code>Mathlib4</code> verification targets for deterministic replay</li>
-              <li>Automated GitHub Actions CI validates every PR submission to <code>data/benchmark.json</code></li>
-              <li>Requires public Lean 4 repository, manuscript, or independent kernel verification link</li>
-              <li>MIT-licensed website &amp; open benchmark metadata</li>
-            </ul>
-            <div class="submit-cta-row">
-              <a
-                href="https://github.com/JadenMajid/millieniumbench"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn btn-primary"
-              >
-                Open GitHub Repository
-              </a>
-              <a
-                href="data/benchmark.json"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn btn-secondary"
-              >
-                Download benchmark.json
-              </a>
-            </div>
-          </div>
-
-          <div class="code-panel">
-            <div class="code-tabs" role="tablist" aria-label="Quickstart tabs">
-              <button type="button" class="code-tab active" data-code-tab="cli">CLI Eval</button>
-              <button type="button" class="code-tab" data-code-tab="pr">GitHub PR</button>
-              <button type="button" class="code-tab" data-code-tab="schema">JSON Schema</button>
-              <button type="button" class="copy-btn" id="copy-code-btn" aria-label="Copy code snippet">
-                Copy
-              </button>
-            </div>
-            <pre class="code-block" id="code-cli"><code># 1. Install the MillieniumBench harness
-pip install millieniumbench
-
-# 2. Pull the pinned Lean 4.14 + Mathlib4 verification sandbox
-millieniumbench setup --lean 4.14.0
-
-# 3. Run evaluation across all 7 Clay Millennium Problems
-millieniumbench eval \
-  --model your-org/your-prover-v1 \
-  --harness lean4-agent \
-  --split all \
-  --output submissions/your-org/your-prover-v1.json</code></pre>
-
-            <pre class="code-block" id="code-pr" hidden><code># Fork &amp; clone the MillieniumBench repository
-git clone https://github.com/&lt;your-user&gt;/millieniumbench.git
-cd millieniumbench
-
-# Add your verified trace &amp; summary JSON
-cp results.json submissions/your-org/your-model.json
-
-# Validate locally before opening a Pull Request
-millieniumbench verify submissions/your-org/your-model.json
-
-git checkout -b submit/your-model
-git add submissions/your-org/your-model.json
-git commit -m "Add MillieniumBench evaluation for Your-Model"
-git push origin submit/your-model</code></pre>
-
-            <pre class="code-block" id="code-schema" hidden><code>{
-  "id": "your-model-id",
-  "name": "Your Model Name",
-  "organization": "Your Lab",
-  "openWeights": false,
-  "date": "2026-11-23",
-  "leanVerifiedCount": 1,
-  "claimedPartialCount": 0,
-  "cmiAwardedCount": 0,
-  "track": "verified",
-  "milestoneLabel": "Target Problem",
-  "verificationSummary": "Lean 4 kernel &amp; independent checker status",
-  "problems": {
-    "p-vs-np": { "label": "—", "state": "none" },
-    "riemann": { "label": "Lean-Verified", "state": "verified" }
-  }
-}</code></pre>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Citation Section -->
-    <section class="section" id="cite">
-      <div class="container cite-container">
-        <div>
-          <span class="section-kicker">05 · Citation</span>
-          <h2 class="section-title">Cite MillieniumBench</h2>
-          <p class="section-lead">
-            If you use MillieniumBench, its Lean 4 formalization suite, or the adversarial proof-flaw
-            audit dataset in your research, please cite our benchmark repository:
-          </p>
-        </div>
-
-        <div class="code-panel">
-          <div class="code-tabs">
-            <span class="code-label">BibTeX</span>
-            <button type="button" class="copy-btn" id="copy-bibtex-btn">Copy BibTeX</button>
-          </div>
-          <pre class="code-block" id="bibtex-block"><code>@misc{millieniumbench2026,
-  title        = {MillieniumBench: Evaluating Frontier AI on the Clay Millennium Prize Problems},
-  author       = {MillieniumBench Contributors},
-  year         = {2026},
-  howpublished = {\url{https://github.com/JadenMajid/millieniumbench}},
-  note         = {Version 0.2.0, Verified Millennium Prize AI Tracker}
-}</code></pre>
-        </div>
-
-        <aside class="disclaimer-box">
-          <strong>Independence Notice:</strong> MillieniumBench is an independent open-source AI
-          research benchmark inspired by the seven Millennium Prize Problems established in 2000 by
-          the Clay Mathematics Institute (CMI). MillieniumBench is not affiliated with, sponsored
-          by, or endorsed by the Clay Mathematics Institute. Official prize determinations remain
-          solely with CMI under its published rules.
-        </aside>
-      </div>
-    </section>
   </main>
 
   <!-- Footer -->
@@ -552,13 +344,11 @@ git push origin submit/your-model</code></pre>
     <div class="container footer-inner">
       <div class="footer-brand">
         <span class="brand-name">MillieniumBench</span>
-        <span class="footer-copy">Open AI benchmark for the Clay Millennium Prize Problems · MIT License</span>
+        <span class="footer-copy">Open AI benchmark for the Clay Millennium Prize Problems · Not affiliated with the Clay Mathematics Institute · MIT License</span>
       </div>
       <div class="footer-links">
         <a href="#leaderboard">Leaderboard</a>
         <a href="#problems">Problems</a>
-        <a href="#methodology">Methodology</a>
-        <a href="#submit">Submit</a>
         <a href="https://github.com/JadenMajid/millieniumbench" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
     </div>
@@ -583,7 +373,7 @@ git push origin submit/your-model</code></pre>
   </div>
 
   <!-- Embedded fallback dataset for offline / file:// preview + main script -->
-  <script src="data/benchmark.js"></script>
-  <script src="app.js"></script>
+  <script src="data/benchmark.js?v=0.2.1"></script>
+  <script src="app.js?v=0.2.1"></script>
 </body>
 </html>

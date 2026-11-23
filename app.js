@@ -7,7 +7,7 @@
     view: "table",
     provider: "all",
     search: "",
-    sortKey: "leanVerifiedCount",
+    sortKey: "claimedCount",
     sortDir: "desc",
     problemFilter: "all",
   };
@@ -142,9 +142,9 @@
     const q = state.search.trim().toLowerCase();
 
     const filtered = state.data.models.filter((m) => {
-      if (state.track === "verified" && (m.leanVerifiedCount ?? 0) === 0) return false;
-      if (state.track === "claimed" && (m.claimedPartialCount ?? 0) === 0) return false;
-      if (state.track === "open" && ((m.leanVerifiedCount ?? 0) > 0 || (m.claimedPartialCount ?? 0) > 0)) return false;
+      if (state.track === "claimed" && (m.claimedCount ?? 0) === 0) return false;
+      if (state.track === "cmi" && (m.cmiVerifiedCount ?? 0) === 0) return false;
+      if (state.track === "open" && ((m.claimedCount ?? 0) > 0 || (m.cmiVerifiedCount ?? 0) > 0)) return false;
       if (state.provider !== "all" && m.organization !== state.provider) return false;
       if (q) {
         const hay = `${m.name} ${m.organization} ${m.milestoneLabel} ${m.verificationSummary}`.toLowerCase();
@@ -162,7 +162,9 @@
       }
       const diff = ((a[key] ?? 0) - (b[key] ?? 0)) * dir;
       if (diff !== 0) return diff;
-      const claimDiff = (b.claimedPartialCount ?? 0) - (a.claimedPartialCount ?? 0);
+      const cmiDiff = (b.cmiVerifiedCount ?? 0) - (a.cmiVerifiedCount ?? 0);
+      if (cmiDiff !== 0) return cmiDiff;
+      const claimDiff = (b.claimedCount ?? 0) - (a.claimedCount ?? 0);
       if (claimDiff !== 0) return claimDiff;
       return String(b.date ?? "").localeCompare(String(a.date ?? ""));
     });
@@ -183,8 +185,8 @@
     if (models.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="8" style="text-align:center; padding:34px; color:var(--ink-muted);">
-            No verified entries match the current filter criteria.
+          <td colspan="7" style="text-align:center; padding:34px; color:var(--ink-muted);">
+            No models match the current filter criteria.
           </td>
         </tr>
       `;
@@ -196,14 +198,14 @@
             rank <= 3
               ? `<span class="rank-medal rank-${rank}">${rank}</span>`
               : `${rank}`;
-          const verifiedPill =
-            m.leanVerifiedCount > 0
-              ? `<span class="open-solved-pill has-solve">${m.leanVerifiedCount} / 6</span>`
-              : `<span class="matrix-empty">0 / 6</span>`;
           const claimedPill =
-            m.claimedPartialCount > 0
-              ? `<span class="badge badge-claimed">${m.claimedPartialCount}</span>`
-              : `<span class="matrix-empty">0</span>`;
+            m.claimedCount > 0
+              ? `<span class="badge badge-claimed">${m.claimedCount} / 6</span>`
+              : `<span class="matrix-empty">0 / 6</span>`;
+          const cmiPill =
+            m.cmiVerifiedCount > 0
+              ? `<span class="open-solved-pill has-solve">${m.cmiVerifiedCount} / 6</span>`
+              : `<span class="matrix-empty">0 / 6</span>`;
 
           return `
             <tr data-model-id="${escapeHtml(m.id)}" tabindex="0" aria-label="Inspect ${escapeHtml(m.name)}">
@@ -215,9 +217,8 @@
                 </div>
               </td>
               <td><span class="badge badge-arch">${escapeHtml(m.organization)}</span></td>
-              <td class="col-num">${verifiedPill}</td>
               <td class="col-num">${claimedPill}</td>
-              <td class="col-num"><span class="matrix-empty">${m.cmiAwardedCount} / 6</span></td>
+              <td class="col-num">${cmiPill}</td>
               <td>
                 <div class="model-cell">
                   <span style="font-weight:500; color:var(--ink);">${escapeHtml(m.milestoneLabel)}</span>
@@ -460,9 +461,9 @@
       .join("");
 
     const statusBadgeCls =
-      m.leanVerifiedCount > 0
-        ? "badge-ai-verified"
-        : m.claimedPartialCount > 0
+      m.cmiVerifiedCount > 0
+        ? "badge-solved"
+        : m.claimedCount > 0
           ? "badge-claimed"
           : "badge-arch";
 
@@ -475,12 +476,12 @@
 
       <div class="tier-list">
         <div class="tier-item">
-          <strong>Independently Lean-Verified Proofs</strong>
-          <p style="font-family:var(--font-mono); font-size:1.25rem; font-weight:600; color:var(--teal); margin-top:4px;">${m.leanVerifiedCount} / 6</p>
+          <strong>Claimed</strong>
+          <p style="font-family:var(--font-mono); font-size:1.25rem; font-weight:600; color:var(--gold); margin-top:4px;">${m.claimedCount} / 6</p>
         </div>
         <div class="tier-item">
-          <strong>Claimed / Partial Breakthroughs</strong>
-          <p style="font-family:var(--font-mono); font-size:1.25rem; font-weight:600; color:var(--gold); margin-top:4px;">${m.claimedPartialCount}</p>
+          <strong>CMI Verified</strong>
+          <p style="font-family:var(--font-mono); font-size:1.25rem; font-weight:600; color:var(--teal); margin-top:4px;">${m.cmiVerifiedCount} / 6</p>
         </div>
       </div>
 
@@ -707,7 +708,7 @@
 
   async function loadData() {
     try {
-      const resp = await fetch("data/benchmark.json", { cache: "no-store" });
+      const resp = await fetch("data/benchmark.json?v=0.2.1", { cache: "no-store" });
       if (!resp.ok) throw new Error("HTTP error");
       return await resp.json();
     } catch (_) {
