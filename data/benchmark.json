@@ -3,8 +3,8 @@
     "name": "MillieniumBench",
     "version": "0.2.0",
     "lastUpdated": "2026-11-23",
-    "leanVersion": "Lean 4.14.0 / Mathlib4",
-    "statusNote": "Updated Nov 23, 2026 with verified 2026 AI breakthroughs (Alpöge–Claude Lean 4 Riemann/GRH proof, OpenAI forced Navier–Stokes blowup, and OpenAI Yang–Mills existence). Official Clay prizes remain pending CMI's mandatory peer-review and 2-year scrutiny rules."
+    "leanVersion": "Lean 4 / Mathlib4",
+    "statusNote": "Verified real-world proof attempts only — no synthetic or placeholder scores. Official Clay prizes remain pending CMI's mandatory peer-review and 2-year scrutiny rules."
   },
   "problems": [
     {
@@ -16,6 +16,7 @@
       "category": "complexity",
       "status": "Unsolved",
       "statusType": "unsolved",
+      "aiStatusSummary": "No verified AI proof",
       "prize": "$1,000,000",
       "proposed": "Stephen Cook (1971)",
       "officialAuthor": "Stephen Cook",
@@ -27,12 +28,10 @@
       "tiers": {
         "formalization": "Formalize Cook–Levin theorem, polynomial-time reductions, and circuit complexity classes (AC⁰, NC¹, P/poly) in Lean 4.",
         "milestones": "Reproduce Baker–Gill–Solovay relativization, Razborov–Rudich natural proofs barrier, and Aaronson–Wigderson algebrization barrier.",
-        "flawAudit": "28 adversarial & historical flawed P vs NP manuscripts (hidden exponential blowup, invalid diagonalization, non-uniform reductions).",
+        "flawAudit": "Detect invalid deductions in flawed P vs NP manuscripts (hidden exponential blowup, invalid diagonalization, non-uniform reductions).",
         "grandGoal": "Complete Lean 4 proof of P = NP or P ≠ NP with zero axioms beyond standard Mathlib foundations."
       },
-      "leanSnippet": "import Mathlib.Computability.TMComputable\n\nnamespace MillieniumBench.PvsNP\n\n/-- Decision problem solvable in deterministic polynomial time. -/\ndef InP (L : Set (List Bool)) : Prop := sorry\n\n/-- Decision problem verifiable in deterministic polynomial time. -/\ndef InNP (L : Set (List Bool)) : Prop := sorry\n\n/-- Clay Millennium Prize Statement: Does P equal NP? -/\ntheorem p_vs_np : (∀ L, InP L ↔ InNP L) ∨ ¬(∀ L, InP L ↔ InNP L) := by\n  -- A constructive resolution proves one disjunct directly.\n  sorry\n\nend MillieniumBench.PvsNP",
-      "subtasks": 24,
-      "sotaScore": 44.2
+      "leanSnippet": "import Mathlib.Computability.TMComputable\n\nnamespace MillieniumBench.PvsNP\n\n/-- Decision problem solvable in deterministic polynomial time. -/\ndef InP (L : Set (List Bool)) : Prop := sorry\n\n/-- Decision problem verifiable in deterministic polynomial time. -/\ndef InNP (L : Set (List Bool)) : Prop := sorry\n\n/-- Clay Millennium Prize Statement: Does P equal NP? -/\ntheorem p_vs_np : (∀ L, InP L ↔ InNP L) ∨ ¬(∀ L, InP L ↔ InNP L) := by\n  -- A constructive resolution proves one disjunct directly.\n  sorry\n\nend MillieniumBench.PvsNP"
     },
     {
       "id": "riemann",
@@ -43,6 +42,7 @@
       "category": "number-theory",
       "status": "AI Lean-Verified (Nov 2026)",
       "statusType": "ai-verified",
+      "aiStatusSummary": "Alpöge–Claude (Lean 4, Nov 2026)",
       "prize": "$1M · Pending CMI 2-Yr Review",
       "proposed": "Bernhard Riemann (1859)",
       "officialAuthor": "Enrico Bombieri",
@@ -54,12 +54,10 @@
       "tiers": {
         "formalization": "Formalize the Euler product, functional equation ξ(s) = ξ(1 - s), and Hadamard–de la Vallée Poussin zero-free region.",
         "milestones": "Prove equivalence to Lagarias's elementary inequality, Robin's criterion, and Hardy's theorem on infinitely many critical-line zeros.",
-        "flawAudit": "34 flawed Riemann proofs (circular contour integrals, illegal exchange of limits, invalid self-adjoint operator constructions).",
-        "grandGoal": "Mechanically verified proof of `RiemannHypothesis` (achieved Nov 2026 by Alpöge + Claude; now serves as a full-proof replication & compression benchmark)."
+        "flawAudit": "Detect invalid deductions in flawed Riemann proofs (circular contour integrals, illegal exchange of limits, invalid self-adjoint operators).",
+        "grandGoal": "Mechanically verified proof of `RiemannHypothesis` (achieved Nov 2026 by Alpöge + Claude; pending CMI 2-year peer review)."
       },
-      "leanSnippet": "import Mathlib.NumberTheory.LSeries.RiemannZeta\n\nnamespace MillieniumBench.Riemann\n\n/-- Every non-trivial zero of ζ(s) lies on the critical line Re(s) = 1/2.\n    Lean-verified Nov 20, 2026 (Alpöge + Claude); pending CMI 2-year review. -/\ntheorem riemann_hypothesis :\n    ∀ s : ℂ, riemannZeta s = 0 →\n      (¬∃ n : ℕ, s = -2 * (n + 1)) →\n      s ≠ 1 →\n      s.re = 1 / 2 := by\n  sorry\n\nend MillieniumBench.Riemann",
-      "subtasks": 26,
-      "sotaScore": 100.0
+      "leanSnippet": "import Mathlib.NumberTheory.LSeries.RiemannZeta\n\nnamespace MillieniumBench.Riemann\n\n/-- Every non-trivial zero of ζ(s) lies on the critical line Re(s) = 1/2.\n    Lean-verified Nov 20, 2026 (Alpöge + Claude); pending CMI 2-year review. -/\ntheorem riemann_hypothesis :\n    ∀ s : ℂ, riemannZeta s = 0 →\n      (¬∃ n : ℕ, s = -2 * (n + 1)) →\n      s ≠ 1 →\n      s.re = 1 / 2 := by\n  sorry\n\nend MillieniumBench.Riemann"
     },
     {
       "id": "yang-mills",
@@ -70,6 +68,7 @@
       "category": "physics-pde",
       "status": "Partial · Existence (Oct 2026)",
       "statusType": "claimed",
+      "aiStatusSummary": "OpenAI (4D Existence only, Oct 2026)",
       "prize": "$1M · Mass Gap Still Open",
       "proposed": "Yang & Mills (1954)",
       "officialAuthor": "Arthur Jaffe & Edward Witten",
@@ -81,12 +80,10 @@
       "tiers": {
         "formalization": "Formalize principal G-bundles, Yang–Mills curvature functionals, lattice gauge Wilson action, and reflection positivity.",
         "milestones": "Reproduce 2D Yang–Mills exact solvability, Balaban's renormalization group estimates on finite lattices, and 4D existence construction.",
-        "flawAudit": "18 flawed QFT proofs (uncontrolled UV continuum limits, non-rigorous path integrals, missing reflection positivity).",
+        "flawAudit": "Detect invalid deductions in flawed QFT proofs (uncontrolled UV continuum limits, non-rigorous path integrals, missing reflection positivity).",
         "grandGoal": "Formalized existence of Wightman fields for compact simple G on ℝ⁴ AND proof of strictly positive spectral mass gap Δ > 0."
       },
-      "leanSnippet": "import Mathlib.Analysis.InnerProductSpace.Spectrum\n\nnamespace MillieniumBench.YangMills\n\nstructure QuantumYangMills (G : Type*) where\n  hilbertSpace : Type*\n  hamiltonian : hilbertSpace →ₗ[ℂ] hilbertSpace\n  satisfiesOsterwalderSchrader : Prop\n  massGap : ℝ\n  massGap_pos : 0 < massGap\n\ntheorem yang_mills_existence_and_mass_gap\n    (G : Type*) [CompactSimpleLieGroup G] :\n    ∃ T : QuantumYangMills G, T.satisfiesOsterwalderSchrader := by\n  sorry\n\nend MillieniumBench.YangMills",
-      "subtasks": 18,
-      "sotaScore": 64.5
+      "leanSnippet": "import Mathlib.Analysis.InnerProductSpace.Spectrum\n\nnamespace MillieniumBench.YangMills\n\nstructure QuantumYangMills (G : Type*) where\n  hilbertSpace : Type*\n  hamiltonian : hilbertSpace →ₗ[ℂ] hilbertSpace\n  satisfiesOsterwalderSchrader : Prop\n  massGap : ℝ\n  massGap_pos : 0 < massGap\n\ntheorem yang_mills_existence_and_mass_gap\n    (G : Type*) [CompactSimpleLieGroup G] :\n    ∃ T : QuantumYangMills G, T.satisfiesOsterwalderSchrader := by\n  sorry\n\nend MillieniumBench.YangMills"
     },
     {
       "id": "navier-stokes",
@@ -97,6 +94,7 @@
       "category": "physics-pde",
       "status": "AI Claimed · Forced (Sep 2026)",
       "statusType": "claimed",
+      "aiStatusSummary": "OpenAI (Forced C/D, Sep 2026)",
       "prize": "$1M · CMI Active / Unforced Open",
       "proposed": "Navier (1822) & Stokes (1845)",
       "officialAuthor": "Charles Fefferman",
@@ -108,12 +106,10 @@
       "tiers": {
         "formalization": "Formalize Sobolev spaces Hˢ(ℝ³), Leray–Hopf weak solutions, Helmholtz projection, and energy inequalities.",
         "milestones": "Reproduce 2D global regularity, Ladyzhenskaya–Prodi–Serrin criteria, Beale–Kato–Majda vorticity blowup criterion, and forced singularity constructions.",
-        "flawAudit": "25 flawed regularity/blowup proofs (invalid Gronwall inequalities, supercritical scaling confusion, NL-to-Lean cutoff/translation mismatches).",
+        "flawAudit": "Detect invalid deductions in flawed PDE proofs (invalid Gronwall inequalities, supercritical scaling confusion, NL-to-Lean cutoff/translation mismatches).",
         "grandGoal": "Peer-reviewed, faithful Lean 4 resolution of Fefferman Alternatives (C)/(D) without translation gaps, plus resolution of the unforced (f = 0) case."
       },
-      "leanSnippet": "namespace MillieniumBench.NavierStokes\n\n/-- 3D incompressible Navier-Stokes: global smoothness vs finite-time blowup.\n    Sep 2026: OpenAI claimed forced blowup (Alternatives C/D); unforced f = 0 remains open. -/\naxiom SmoothDivergenceFree (u0 : (Fin 3 → ℝ) → (Fin 3 → ℝ)) : Prop\naxiom GlobalSmoothUnforced (ν : ℝ) (u0 : (Fin 3 → ℝ) → (Fin 3 → ℝ)) : Prop\n\ntheorem navier_stokes_unforced_regularity_or_blowup (ν : ℝ) (hν : 0 < ν) :\n    (∀ u0, SmoothDivergenceFree u0 → GlobalSmoothUnforced ν u0) ∨\n    (∃ u0, SmoothDivergenceFree u0 ∧ ¬GlobalSmoothUnforced ν u0) := by\n  sorry\n\nend MillieniumBench.NavierStokes",
-      "subtasks": 22,
-      "sotaScore": 92.0
+      "leanSnippet": "namespace MillieniumBench.NavierStokes\n\n/-- 3D incompressible Navier-Stokes: global smoothness vs finite-time blowup.\n    Sep 2026: OpenAI claimed forced blowup (Alternatives C/D); unforced f = 0 remains open. -/\naxiom SmoothDivergenceFree (u0 : (Fin 3 → ℝ) → (Fin 3 → ℝ)) : Prop\naxiom GlobalSmoothUnforced (ν : ℝ) (u0 : (Fin 3 → ℝ) → (Fin 3 → ℝ)) : Prop\n\ntheorem navier_stokes_unforced_regularity_or_blowup (ν : ℝ) (hν : 0 < ν) :\n    (∀ u0, SmoothDivergenceFree u0 → GlobalSmoothUnforced ν u0) ∨\n    (∃ u0, SmoothDivergenceFree u0 ∧ ¬GlobalSmoothUnforced ν u0) := by\n  sorry\n\nend MillieniumBench.NavierStokes"
     },
     {
       "id": "hodge",
@@ -124,6 +120,7 @@
       "category": "geometry-topology",
       "status": "Unsolved",
       "statusType": "unsolved",
+      "aiStatusSummary": "No verified AI proof",
       "prize": "$1,000,000",
       "proposed": "W. V. D. Hodge (1950)",
       "officialAuthor": "Pierre Deligne",
@@ -135,12 +132,10 @@
       "tiers": {
         "formalization": "Formalize Kähler manifolds, Dolbeault cohomology, Hodge decomposition, and algebraic cycle class maps.",
         "milestones": "Prove the Lefschetz (1,1) theorem, Hard Lefschetz consequences for codimension 1 and dim(X) - 1, and known cases for abelian varieties of low dimension.",
-        "flawAudit": "16 flawed Hodge proofs (conflating integral vs rational Hodge classes, invalid analytic-to-algebraic GAGA invocations).",
+        "flawAudit": "Detect invalid deductions in flawed Hodge proofs (conflating integral vs rational Hodge classes, invalid analytic-to-algebraic GAGA invocations).",
         "grandGoal": "Complete formal proof of the rational Hodge Conjecture or verified construction of a smooth projective counterexample."
       },
-      "leanSnippet": "namespace MillieniumBench.Hodge\n\naxiom SmoothProjectiveVariety : Type*\naxiom HodgeClass (X : SmoothProjectiveVariety) (p : ℕ) : Type*\naxiom IsAlgebraicCycleClass {X : SmoothProjectiveVariety} {p : ℕ}\n    (α : HodgeClass X p) : Prop\n\ntheorem hodge_conjecture (X : SmoothProjectiveVariety) (p : ℕ)\n    (α : HodgeClass X p) : IsAlgebraicCycleClass α := by\n  sorry\n\nend MillieniumBench.Hodge",
-      "subtasks": 18,
-      "sotaScore": 31.8
+      "leanSnippet": "namespace MillieniumBench.Hodge\n\naxiom SmoothProjectiveVariety : Type*\naxiom HodgeClass (X : SmoothProjectiveVariety) (p : ℕ) : Type*\naxiom IsAlgebraicCycleClass {X : SmoothProjectiveVariety} {p : ℕ}\n    (α : HodgeClass X p) : Prop\n\ntheorem hodge_conjecture (X : SmoothProjectiveVariety) (p : ℕ)\n    (α : HodgeClass X p) : IsAlgebraicCycleClass α := by\n  sorry\n\nend MillieniumBench.Hodge"
     },
     {
       "id": "bsd",
@@ -151,6 +146,7 @@
       "category": "number-theory",
       "status": "Unsolved",
       "statusType": "unsolved",
+      "aiStatusSummary": "No verified AI proof",
       "prize": "$1,000,000",
       "proposed": "Birch & Swinnerton-Dyer (1965)",
       "officialAuthor": "Andrew Wiles",
@@ -162,12 +158,10 @@
       "tiers": {
         "formalization": "Formalize Weierstrass models over ℚ, Mordell–Weil theorem, Selmer & Tate–Shafarevich groups, and Hasse–Weil L-functions.",
         "milestones": "Reproduce Coates–Wiles theorem (CM curves), Gross–Zagier height formula, and Kolyvagin's Euler system proof for analytic rank ≤ 1.",
-        "flawAudit": "19 flawed BSD proofs (unjustified finiteness of Ш(E/ℚ), invalid analytic continuation of L-series without modularity).",
+        "flawAudit": "Detect invalid deductions in flawed BSD proofs (unjustified finiteness of Ш(E/ℚ), invalid analytic continuation of L-series without modularity).",
         "grandGoal": "Full formal proof of `rank E(ℚ) = ord_{s=1} L(E, s)` for all elliptic curves over ℚ."
       },
-      "leanSnippet": "namespace MillieniumBench.BSD\n\naxiom EllipticCurveQ : Type*\naxiom mordellWeilRank (E : EllipticCurveQ) : ℕ\naxiom analyticRank (E : EllipticCurveQ) : ℕ\n\ntheorem birch_swinnerton_dyer (E : EllipticCurveQ) :\n    mordellWeilRank E = analyticRank E := by\n  sorry\n\nend MillieniumBench.BSD",
-      "subtasks": 20,
-      "sotaScore": 41.5
+      "leanSnippet": "namespace MillieniumBench.BSD\n\naxiom EllipticCurveQ : Type*\naxiom mordellWeilRank (E : EllipticCurveQ) : ℕ\naxiom analyticRank (E : EllipticCurveQ) : ℕ\n\ntheorem birch_swinnerton_dyer (E : EllipticCurveQ) :\n    mordellWeilRank E = analyticRank E := by\n  sorry\n\nend MillieniumBench.BSD"
     },
     {
       "id": "poincare",
@@ -178,6 +172,7 @@
       "category": "geometry-topology",
       "status": "Officially Solved (CMI)",
       "statusType": "solved",
+      "aiStatusSummary": "Solved by G. Perelman (2003)",
       "prize": "Awarded 2010 (Perelman, declined)",
       "proposed": "Henri Poincaré (1904)",
       "officialAuthor": "John Milnor",
@@ -189,189 +184,196 @@
       "tiers": {
         "formalization": "Formalize Riemannian metrics, Ricci curvature tensor, Hamilton's Ricci flow PDE, and Perelman's W-entropy functional.",
         "milestones": "Prove no local collapsing theorem, canonical neighborhood theorem, finite-time extinction for simply connected 3-manifolds.",
-        "flawAudit": "20 historical flawed Poincaré attempts (early topological surgery errors, Dehn lemma misapplications, Ricci singularity gaps).",
+        "flawAudit": "Detect invalid deductions in historical flawed Poincaré attempts (early topological surgery errors, Dehn lemma misapplications, Ricci singularity gaps).",
         "grandGoal": "Complete, dependency-clean Lean 4 formalization of Perelman's proof from Mathlib primitives without external hints."
       },
-      "leanSnippet": "import Mathlib.Geometry.Manifold.ChartedSpace\nimport Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected\n\nnamespace MillieniumBench.Poincare\n\n/-- Control Benchmark: Every closed simply connected 3-manifold is homeomorphic to S³. -/\ntheorem poincare_conjecture\n    (M : Type*) [TopologicalSpace M] [CompactSpace M]\n    [ClosedThreeManifold M] [SimplyConnectedSpace M] :\n    Nonempty (M ≃ₜ Sphere3) := by\n  sorry\n\nend MillieniumBench.Poincare",
-      "subtasks": 32,
-      "sotaScore": 58.4
+      "leanSnippet": "import Mathlib.Geometry.Manifold.ChartedSpace\nimport Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected\n\nnamespace MillieniumBench.Poincare\n\n/-- Control Benchmark: Every closed simply connected 3-manifold is homeomorphic to S³. -/\ntheorem poincare_conjecture\n    (M : Type*) [TopologicalSpace M] [CompactSpace M]\n    [ClosedThreeManifold M] [SimplyConnectedSpace M] :\n    Nonempty (M ≃ₜ Sphere3) := by\n  sorry\n\nend MillieniumBench.Poincare"
     }
   ],
   "models": [
     {
-      "id": "claude-alpoge-lean",
-      "name": "Claude + Lean 4 (Alpöge–Anthropic)",
-      "organization": "Anthropic (Human-AI Collab)",
-      "category": "Hybrid (LLM + Lean 4)",
+      "id": "claude-research-model",
+      "name": "Claude (Internal Frontier)",
+      "organization": "Anthropic",
       "openWeights": false,
       "date": "2026-11-20",
-      "overall": 66.8,
-      "openFrontier": 56.4,
-      "poincareControl": 54.8,
-      "flawDetection": 81.2,
-      "openSolved": "1 / 6 (RH Lean)",
-      "hasBreakthrough": true,
-      "avgCost": "Research Run",
+      "leanVerifiedCount": 1,
+      "claimedPartialCount": 0,
+      "cmiAwardedCount": 0,
+      "track": "verified",
+      "verificationSummary": "Lean FRO & Mathlib Verified · Pending CMI 2-Yr Review",
+      "milestoneLabel": "Riemann Hypothesis & GRH",
+      "highlights": "Nov 20, 2026: Used in collaboration with mathematician Levent Alpöge to produce a ~17M-line (175,187-file) Lean 4 / Mathlib proof of both the Riemann Hypothesis and Generalized Riemann Hypothesis (GRH). Independently checked by the Lean FRO, Mathlib Initiative, con-leche, and con-ron with zero `sorry`. Anthropic did not specify which internal Claude checkpoint was used; official CMI prize recognition awaits peer review and a 2-year scrutiny window.",
       "problems": {
-        "p-vs-np": 42.1,
-        "riemann": 100.0,
-        "yang-mills": 26.5,
-        "navier-stokes": 35.8,
-        "hodge": 30.4,
-        "bsd": 40.6,
-        "poincare": 54.8
-      },
-      "highlights": "Nov 20, 2026 breakthrough: Levent Alpöge + Claude produced a ~17M-line (175,187-file) Lean 4 / Mathlib proof of the Riemann Hypothesis and GRH, verified by the Lean FRO, Mathlib Initiative, and independent checkers (con-leche, con-ron). Pending CMI's mandatory 2-year peer review."
+        "p-vs-np": { "label": "—", "state": "none" },
+        "riemann": { "label": "Lean-Verified", "state": "verified" },
+        "yang-mills": { "label": "—", "state": "none" },
+        "navier-stokes": { "label": "—", "state": "none" },
+        "hodge": { "label": "—", "state": "none" },
+        "bsd": { "label": "—", "state": "none" },
+        "poincare": { "label": "—", "state": "none" }
+      }
     },
     {
-      "id": "openai-multiagent-lean",
-      "name": "OpenAI Multi-Agent Prover (Lean 4)",
+      "id": "gpt-6-2-astra",
+      "name": "GPT-6.2 Astra",
       "organization": "OpenAI",
-      "category": "Hybrid (LLM + Lean 4)",
       "openWeights": false,
-      "date": "2026-11-10",
-      "overall": 62.4,
-      "openFrontier": 58.9,
-      "poincareControl": 53.5,
-      "flawDetection": 76.0,
-      "openSolved": "1* / 6 (NS Forced)",
-      "hasBreakthrough": true,
-      "avgCost": "Research Run",
+      "date": "2026-11-15",
+      "leanVerifiedCount": 0,
+      "claimedPartialCount": 2,
+      "cmiAwardedCount": 0,
+      "track": "claimed",
+      "verificationSummary": "Forced NS Under Audit · YM Existence Released (Gross Committee)",
+      "milestoneLabel": "Navier–Stokes (Forced) · Yang–Mills (Existence)",
+      "highlights": "OpenAI's flagship frontier model (`gpt-6.2-astra`) and its internal predecessor checkpoint. Sep 8, 2026: Produced a 166-page proof + Lean 4 formalization of finite-time blowup for 3D Navier–Stokes with a smooth external force targeting Fefferman Alternatives (C) & (D) (NL-to-Lean audit ongoing; unforced f = 0 case open). Oct 26 / Nov 10, 2026: Produced a Lean 4 existence proof for 4D Yang–Mills / QCD (`OpenAI-YM-20261028`) shepherded by David J. Gross's committee (mass gap Δ > 0 remains open).",
       "problems": {
-        "p-vs-np": 43.0,
-        "riemann": 46.2,
-        "yang-mills": 64.5,
-        "navier-stokes": 92.0,
-        "hodge": 29.8,
-        "bsd": 39.2,
-        "poincare": 53.5
-      },
-      "highlights": "Sep 8, 2026: Released Lean-verified forced 3D Navier–Stokes finite-time blowup targeting Fefferman Alternatives (C) & (D) (NL-to-Lean translation audit ongoing; unforced case open). Oct 26 / Nov 2026: Released 4D Yang–Mills existence proof shepherded by David J. Gross's committee (mass gap Δ > 0 remains open)."
+        "p-vs-np": { "label": "—", "state": "none" },
+        "riemann": { "label": "—", "state": "none" },
+        "yang-mills": { "label": "Partial (Existence)", "state": "partial" },
+        "navier-stokes": { "label": "Claimed (Forced)", "state": "claimed" },
+        "hodge": { "label": "—", "state": "none" },
+        "bsd": { "label": "—", "state": "none" },
+        "poincare": { "label": "—", "state": "none" }
+      }
     },
     {
-      "id": "axiom-prover-v2",
-      "name": "AxiomProver-2 + Lean4-Agent",
-      "organization": "FormalMath Lab",
-      "category": "Hybrid (LLM + Lean 4)",
+      "id": "claude-fable-5-2",
+      "name": "Claude Fable 5.2",
+      "organization": "Anthropic",
       "openWeights": false,
-      "date": "2026-11-10",
-      "overall": 44.8,
-      "openFrontier": 39.6,
-      "poincareControl": 58.4,
-      "flawDetection": 76.4,
-      "openSolved": "0 / 6",
-      "hasBreakthrough": false,
-      "avgCost": "$42.50",
+      "date": "2026-11-01",
+      "leanVerifiedCount": 0,
+      "claimedPartialCount": 0,
+      "cmiAwardedCount": 0,
+      "track": "open",
+      "verificationSummary": "No Millennium Prize proof attributed",
+      "milestoneLabel": "None verified",
+      "highlights": "Anthropic's highest-tier general-release reasoning model (Mythos-class architecture, 1M token context) built for deep scientific and mathematical reasoning. No Millennium Prize Problem proof has been publicly attributed specifically to Fable 5.2.",
       "problems": {
-        "p-vs-np": 44.2,
-        "riemann": 48.6,
-        "yang-mills": 27.4,
-        "navier-stokes": 36.1,
-        "hodge": 31.8,
-        "bsd": 41.5,
-        "poincare": 58.4
-      },
-      "highlights": "Automated benchmark run (no human collaborator): verified 114/160 prerequisite & barrier lemmas cleanly in Lean 4.14; highest Poincaré control reconstruction score (58.4%)."
+        "p-vs-np": { "label": "—", "state": "none" },
+        "riemann": { "label": "—", "state": "none" },
+        "yang-mills": { "label": "—", "state": "none" },
+        "navier-stokes": { "label": "—", "state": "none" },
+        "hodge": { "label": "—", "state": "none" },
+        "bsd": { "label": "—", "state": "none" },
+        "poincare": { "label": "—", "state": "none" }
+      }
     },
     {
-      "id": "gemini-deepmath-preview",
-      "name": "Gemini 3.5 DeepMath (Agentic)",
+      "id": "claude-opus-5-5",
+      "name": "Claude Opus 5.5",
+      "organization": "Anthropic",
+      "openWeights": false,
+      "date": "2026-11-01",
+      "leanVerifiedCount": 0,
+      "claimedPartialCount": 0,
+      "cmiAwardedCount": 0,
+      "track": "open",
+      "verificationSummary": "No Millennium Prize proof attributed",
+      "milestoneLabel": "None verified",
+      "highlights": "Anthropic's flagship general-purpose frontier model (1M token context, adaptive thinking). No Millennium Prize Problem proof has been attributed to Opus 5.5.",
+      "problems": {
+        "p-vs-np": { "label": "—", "state": "none" },
+        "riemann": { "label": "—", "state": "none" },
+        "yang-mills": { "label": "—", "state": "none" },
+        "navier-stokes": { "label": "—", "state": "none" },
+        "hodge": { "label": "—", "state": "none" },
+        "bsd": { "label": "—", "state": "none" },
+        "poincare": { "label": "—", "state": "none" }
+      }
+    },
+    {
+      "id": "gpt-6-2-sol",
+      "name": "GPT-6.2 Sol",
+      "organization": "OpenAI",
+      "openWeights": false,
+      "date": "2026-11-15",
+      "leanVerifiedCount": 0,
+      "claimedPartialCount": 0,
+      "cmiAwardedCount": 0,
+      "track": "open",
+      "verificationSummary": "No Millennium Prize proof attributed",
+      "milestoneLabel": "None verified",
+      "highlights": "OpenAI's versatile November 2026 model (`gpt-6.2-sol`) optimized for high-volume coding, document analysis, and everyday reasoning. No Millennium Prize Problem proof has been attributed to Sol.",
+      "problems": {
+        "p-vs-np": { "label": "—", "state": "none" },
+        "riemann": { "label": "—", "state": "none" },
+        "yang-mills": { "label": "—", "state": "none" },
+        "navier-stokes": { "label": "—", "state": "none" },
+        "hodge": { "label": "—", "state": "none" },
+        "bsd": { "label": "—", "state": "none" },
+        "poincare": { "label": "—", "state": "none" }
+      }
+    },
+    {
+      "id": "gemini-4-carbon",
+      "name": "Gemini 4 Carbon",
       "organization": "Google DeepMind",
-      "category": "Hybrid (LLM + Lean 4)",
       "openWeights": false,
-      "date": "2026-11-04",
-      "overall": 43.1,
-      "openFrontier": 38.4,
-      "poincareControl": 55.2,
-      "flawDetection": 79.1,
-      "openSolved": "0 / 6",
-      "hasBreakthrough": false,
-      "avgCost": "$36.00",
+      "date": "2026-10-20",
+      "leanVerifiedCount": 0,
+      "claimedPartialCount": 0,
+      "cmiAwardedCount": 0,
+      "track": "open",
+      "verificationSummary": "No Millennium Prize proof attributed",
+      "milestoneLabel": "None verified",
+      "highlights": "Google DeepMind's heavy-duty Gemini 4 tier built for demanding scientific and intelligence workloads. No Millennium Prize Problem proof has been attributed to Gemini 4 Carbon.",
       "problems": {
-        "p-vs-np": 43.5,
-        "riemann": 47.9,
-        "yang-mills": 25.8,
-        "navier-stokes": 35.4,
-        "hodge": 30.2,
-        "bsd": 40.8,
-        "poincare": 55.2
-      },
-      "highlights": "Top autonomous Flaw Audit precision (79.1%) across adversarial manuscripts and NL-to-Lean translation checks; formally verified Hardy's critical-line theorem and Beale–Kato–Majda sublemmas."
+        "p-vs-np": { "label": "—", "state": "none" },
+        "riemann": { "label": "—", "state": "none" },
+        "yang-mills": { "label": "—", "state": "none" },
+        "navier-stokes": { "label": "—", "state": "none" },
+        "hodge": { "label": "—", "state": "none" },
+        "bsd": { "label": "—", "state": "none" },
+        "poincare": { "label": "—", "state": "none" }
+      }
     },
     {
-      "id": "deepseek-prover-v3",
-      "name": "DeepSeek-Prover-V3 (671B)",
+      "id": "gemini-4-neon",
+      "name": "Gemini 4 Neon",
+      "organization": "Google DeepMind",
+      "openWeights": false,
+      "date": "2026-11-12",
+      "leanVerifiedCount": 0,
+      "claimedPartialCount": 0,
+      "cmiAwardedCount": 0,
+      "track": "open",
+      "verificationSummary": "No Millennium Prize proof attributed",
+      "milestoneLabel": "None verified",
+      "highlights": "Google DeepMind's November 2026 high-speed frontier reasoning model. No Millennium Prize Problem proof has been attributed to Gemini 4 Neon.",
+      "problems": {
+        "p-vs-np": { "label": "—", "state": "none" },
+        "riemann": { "label": "—", "state": "none" },
+        "yang-mills": { "label": "—", "state": "none" },
+        "navier-stokes": { "label": "—", "state": "none" },
+        "hodge": { "label": "—", "state": "none" },
+        "bsd": { "label": "—", "state": "none" },
+        "poincare": { "label": "—", "state": "none" }
+      }
+    },
+    {
+      "id": "deepseek-v4-1-flash",
+      "name": "DeepSeek-V4.1-Flash",
       "organization": "DeepSeek",
-      "category": "Theorem Prover / Agent",
       "openWeights": true,
-      "date": "2026-10-12",
-      "overall": 36.9,
-      "openFrontier": 32.1,
-      "poincareControl": 49.4,
-      "flawDetection": 63.2,
-      "openSolved": "0 / 6",
-      "hasBreakthrough": false,
-      "avgCost": "$6.80",
+      "date": "2026-09-25",
+      "leanVerifiedCount": 0,
+      "claimedPartialCount": 0,
+      "cmiAwardedCount": 0,
+      "track": "open",
+      "verificationSummary": "No Millennium Prize proof attributed",
+      "milestoneLabel": "None verified",
+      "highlights": "DeepSeek's September 2026 open-weights Asymmetric Causal Encoder–Decoder MoE model (552B total parameters). No Millennium Prize Problem proof has been attributed to DeepSeek-V4.1-Flash.",
       "problems": {
-        "p-vs-np": 36.4,
-        "riemann": 41.0,
-        "yang-mills": 19.8,
-        "navier-stokes": 29.7,
-        "hodge": 25.4,
-        "bsd": 34.8,
-        "poincare": 49.4
-      },
-      "highlights": "Top open-weights model on MillieniumBench; exceptional tactic throughput per dollar on Lean 4 lemma milestones."
-    },
-    {
-      "id": "qwen3-formal-72b",
-      "name": "Qwen3-Formal-72B",
-      "organization": "Alibaba Qwen",
-      "category": "Theorem Prover / Agent",
-      "openWeights": true,
-      "date": "2026-09-29",
-      "overall": 31.5,
-      "openFrontier": 27.4,
-      "poincareControl": 42.1,
-      "flawDetection": 58.9,
-      "openSolved": "0 / 6",
-      "hasBreakthrough": false,
-      "avgCost": "$3.20",
-      "problems": {
-        "p-vs-np": 31.2,
-        "riemann": 35.6,
-        "yang-mills": 16.4,
-        "navier-stokes": 24.5,
-        "hodge": 21.8,
-        "bsd": 29.4,
-        "poincare": 42.1
-      },
-      "highlights": "Strong open-weights baseline for Lean 4 tactic generation and analytic number theory inequalities."
-    },
-    {
-      "id": "frontier-llm-zeroshot",
-      "name": "Frontier LLM Baseline (No Verifier)",
-      "organization": "Reference Baseline",
-      "category": "Frontier LLM",
-      "openWeights": false,
-      "date": "2026-09-15",
-      "overall": 19.2,
-      "openFrontier": 16.8,
-      "poincareControl": 24.5,
-      "flawDetection": 68.5,
-      "openSolved": "0 / 6",
-      "hasBreakthrough": false,
-      "avgCost": "$4.90",
-      "problems": {
-        "p-vs-np": 21.4,
-        "riemann": 22.9,
-        "yang-mills": 10.2,
-        "navier-stokes": 14.8,
-        "hodge": 12.1,
-        "bsd": 16.5,
-        "poincare": 24.5
-      },
-      "highlights": "Demonstrates the gap between fluent natural-language mathematical prose (strong flaw spotting) and kernel-checked formal proof construction."
+        "p-vs-np": { "label": "—", "state": "none" },
+        "riemann": { "label": "—", "state": "none" },
+        "yang-mills": { "label": "—", "state": "none" },
+        "navier-stokes": { "label": "—", "state": "none" },
+        "hodge": { "label": "—", "state": "none" },
+        "bsd": { "label": "—", "state": "none" },
+        "poincare": { "label": "—", "state": "none" }
+      }
     }
   ]
 }

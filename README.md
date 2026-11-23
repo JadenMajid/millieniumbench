@@ -16,19 +16,19 @@
 6. **Birch and Swinnerton-Dyer Conjecture** (Arithmetic Geometry) — *Unsolved*
 7. **Poincaré Conjecture** (Geometric Topology) — *Officially Solved by CMI (Grigori Perelman, 2003; awarded 2010, declined) — Control Task*
 
-Under Clay Mathematics Institute rules, official Millennium Prize awards require peer-reviewed publication and two years of mathematical community scrutiny, so Poincaré remains the sole CMI-awarded problem while MillieniumBench tracks both landmark AI formal proofs and four graded evaluation tiers:
+Under Clay Mathematics Institute rules, official Millennium Prize awards require peer-reviewed publication and two years of mathematical community scrutiny, so Poincaré remains the sole CMI-awarded problem. MillieniumBench tracks **only publicly documented real-world proof attempts** (zero synthetic placeholder scores) across four verification stages:
 
-- **Tier 1 (25%) — Formalization Foundations:** Lean 4 / Mathlib4 definitions and foundational lemmas with zero `sorry`.
-- **Tier 2 (35%) — Barrier & Partial Milestones:** Reconstructing landmark partial theorems and known barriers (e.g., Razborov–Rudich, Hardy's theorem, Gross–Zagier, Beale–Kato–Majda).
-- **Tier 3 (20%) — Adversarial Flaw Audit:** Pinpointing the exact first invalid step across 160 flawed purported Millennium proofs.
-- **Tier 4 (20% + Prize Gate) — Poincaré Control & Open Frontier:** End-to-end reconstruction of Perelman's solved proof as calibration, plus kernel-checked open-problem attempts.
+- **Stage 1 — Formalization Foundations:** Definitions and target theorems anchored to standard `Mathlib4` statements with zero `sorry`.
+- **Stage 2 — Independent Kernel Check:** Clean compilation under the official Lean 4 kernel and third-party checkers (*con-leche*, *con-ron*).
+- **Stage 3 — Statement Fidelity Audit:** Human mathematical audit verifying that Lean definitions faithfully match the Clay Institute problem statement.
+- **Stage 4 — CMI 2-Year Peer Review:** Peer-reviewed publication and two years of global mathematical community acceptance.
 
 ---
 
 ## Website Features
 
-- **Interactive Leaderboard:** Sortable columns, track tabs (`Overall Composite`, `Open Frontier`, `Poincaré Control`, `Flaw Audit`), architecture and open-weights filters, live search, and a **7-Problem Heatmap Matrix** view.
-- **Model & Problem Inspector Modals:** Click any model row for its per-problem breakdown across all 7 problems, or click any Millennium Problem card for its formal statement, 4-tier task breakdown, and Lean 4 target skeleton.
+- **Verified Model Leaderboard:** Sortable table and **7-Problem Status Matrix** tracking frontier AI models (`Claude (Internal Frontier)`, `GPT-6.2 Astra`, `Claude Fable 5.2`, `Claude Opus 5.5`, `GPT-6.2 Sol`, `Gemini 4 Carbon`, `Gemini 4 Neon`, `DeepSeek-V4.1-Flash`) regardless of harness/environment, with zero synthetic placeholder scores.
+- **Model & Problem Inspector Modals:** Click any row for public verification notes and per-problem status, or click any Millennium Problem card for its formal statement, latest 2026 verification status, and Lean 4 target skeleton.
 - **Zero-Build Static Architecture:** Plain HTML, CSS, and vanilla JS with KaTeX math rendering and Light/Dark theme support — deploys directly to GitHub Pages with no bundler required.
 
 ---

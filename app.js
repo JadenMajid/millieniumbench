@@ -3,12 +3,11 @@
 
   const state = {
     data: null,
-    track: "overall",
+    track: "all",
     view: "table",
-    category: "all",
-    openWeightsOnly: false,
+    provider: "all",
     search: "",
-    sortKey: "overall",
+    sortKey: "leanVerifiedCount",
     sortDir: "desc",
     problemFilter: "all",
   };
@@ -58,23 +57,25 @@
     });
   }
 
-  function heatStyle(score) {
-    const clamped = Math.max(0, Math.min(100, score));
-    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-    const alpha = (0.08 + (clamped / 100) * 0.42).toFixed(2);
-    if (clamped >= 48) {
-      return isDark
-        ? `background: rgba(62, 194, 174, ${alpha}); color: #d6fff7;`
-        : `background: rgba(20, 116, 103, ${alpha}); color: #0e473f;`;
+  function statusBadgeClass(problem) {
+    const t = problem.statusType || (problem.status === "Unsolved" ? "unsolved" : "solved");
+    if (t === "ai-verified") return "badge-ai-verified";
+    if (t === "claimed") return "badge-claimed";
+    if (t === "solved") return "badge-solved";
+    return "badge-unsolved";
+  }
+
+  function matrixCellHtml(cell) {
+    if (!cell || cell.state === "none") {
+      return `<span class="matrix-empty">—</span>`;
     }
-    if (clamped >= 30) {
-      return isDark
-        ? `background: rgba(223, 176, 89, ${alpha}); color: #fff2d6;`
-        : `background: rgba(169, 120, 34, ${alpha}); color: #5d3f09;`;
-    }
-    return isDark
-      ? `background: rgba(239, 116, 100, ${alpha}); color: #ffdcd7;`
-      : `background: rgba(179, 66, 51, ${alpha}); color: #6e1f15;`;
+    const cls =
+      cell.state === "verified"
+        ? "badge-ai-verified"
+        : cell.state === "claimed" || cell.state === "partial"
+          ? "badge-claimed"
+          : "badge-arch";
+    return `<span class="badge ${cls}">${escapeHtml(cell.label)}</span>`;
   }
 
   /* ------------------------------------------------------------------------
@@ -92,7 +93,6 @@
       const next = current === "dark" ? "light" : "dark";
       document.documentElement.setAttribute("data-theme", next);
       localStorage.setItem("mb-theme", next);
-      if (state.data) renderMatrix();
     });
   }
 
@@ -104,37 +104,50 @@
     const drawer = $("#mobile-drawer");
     if (!btn || !drawer) return;
 
+    function closeDrawer() {
+      if (!drawer.hasAttribute("hidden")) {
+        drawer.setAttribute("hidden", "");
+        btn.setAttribute("aria-expanded", "false");
+      }
+    }
+
     btn.addEventListener("click", () => {
       const isHidden = drawer.hasAttribute("hidden");
       if (isHidden) {
         drawer.removeAttribute("hidden");
         btn.setAttribute("aria-expanded", "true");
       } else {
-        drawer.setAttribute("hidden", "");
-        btn.setAttribute("aria-expanded", "false");
+        closeDrawer();
       }
     });
 
     $$("a", drawer).forEach((link) => {
-      link.addEventListener("click", () => {
-        drawer.setAttribute("hidden", "");
-        btn.setAttribute("aria-expanded", "false");
-      });
+      link.addEventListener("click", closeDrawer);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeDrawer();
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 860) closeDrawer();
     });
   }
 
   /* ------------------------------------------------------------------------
-     Leaderboard Rendering
+     Leaderboard Rendering (Verified Real-World Entries Only)
      ------------------------------------------------------------------------ */
   function getFilteredModels() {
     if (!state.data) return [];
     const q = state.search.trim().toLowerCase();
 
     const filtered = state.data.models.filter((m) => {
-      if (state.category !== "all" && m.category !== state.category) return false;
-      if (state.openWeightsOnly && !m.openWeights) return false;
+      if (state.track === "verified" && (m.leanVerifiedCount ?? 0) === 0) return false;
+      if (state.track === "claimed" && (m.claimedPartialCount ?? 0) === 0) return false;
+      if (state.track === "open" && ((m.leanVerifiedCount ?? 0) > 0 || (m.claimedPartialCount ?? 0) > 0)) return false;
+      if (state.provider !== "all" && m.organization !== state.provider) return false;
       if (q) {
-        const hay = `${m.name} ${m.organization} ${m.category}`.toLowerCase();
+        const hay = `${m.name} ${m.organization} ${m.milestoneLabel} ${m.verificationSummary}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -144,22 +157,17 @@
     const dir = state.sortDir === "asc" ? 1 : -1;
 
     filtered.sort((a, b) => {
-      if (key === "name") return a.name.localeCompare(b.name) * dir;
-      return ((a[key] ?? 0) - (b[key] ?? 0)) * dir;
+      if (key === "name" || key === "organization" || key === "date") {
+        return String(a[key] ?? "").localeCompare(String(b[key] ?? "")) * dir;
+      }
+      const diff = ((a[key] ?? 0) - (b[key] ?? 0)) * dir;
+      if (diff !== 0) return diff;
+      const claimDiff = (b.claimedPartialCount ?? 0) - (a.claimedPartialCount ?? 0);
+      if (claimDiff !== 0) return claimDiff;
+      return String(b.date ?? "").localeCompare(String(a.date ?? ""));
     });
 
     return filtered;
-  }
-
-  function renderScoreCell(value, isHighlighted) {
-    return `
-      <div class="score-bar-cell">
-        <span class="score-num ${isHighlighted ? "highlight-track" : ""}">${value.toFixed(1)}%</span>
-        <div class="mini-bar" aria-hidden="true">
-          <div class="mini-bar-fill" style="width:${Math.min(100, value)}%"></div>
-        </div>
-      </div>
-    `;
   }
 
   function renderLeaderboard() {
@@ -175,8 +183,8 @@
     if (models.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="9" style="text-align:center; padding:34px; color:var(--ink-muted);">
-            No models match the current filter criteria.
+          <td colspan="8" style="text-align:center; padding:34px; color:var(--ink-muted);">
+            No verified entries match the current filter criteria.
           </td>
         </tr>
       `;
@@ -188,25 +196,35 @@
             rank <= 3
               ? `<span class="rank-medal rank-${rank}">${rank}</span>`
               : `${rank}`;
+          const verifiedPill =
+            m.leanVerifiedCount > 0
+              ? `<span class="open-solved-pill has-solve">${m.leanVerifiedCount} / 6</span>`
+              : `<span class="matrix-empty">0 / 6</span>`;
+          const claimedPill =
+            m.claimedPartialCount > 0
+              ? `<span class="badge badge-claimed">${m.claimedPartialCount}</span>`
+              : `<span class="matrix-empty">0</span>`;
+
           return `
             <tr data-model-id="${escapeHtml(m.id)}" tabindex="0" aria-label="Inspect ${escapeHtml(m.name)}">
               <td class="col-rank">${rankBadge}</td>
               <td>
-                <div class="model-cell">
-                  <div class="model-name-row">
-                    <span class="model-name">${escapeHtml(m.name)}</span>
-                    ${m.openWeights ? '<span class="badge badge-open">Open Weights</span>' : ""}
-                  </div>
-                  <span class="model-org">${escapeHtml(m.organization)} · ${escapeHtml(m.date)}</span>
+                <div class="model-name-row">
+                  <span class="model-name">${escapeHtml(m.name)}</span>
+                  ${m.openWeights ? '<span class="badge badge-open">Open Weights</span>' : ""}
                 </div>
               </td>
-              <td><span class="badge badge-arch">${escapeHtml(m.category)}</span></td>
-              <td class="col-num">${renderScoreCell(m.overall, state.track === "overall")}</td>
-              <td class="col-num">${renderScoreCell(m.openFrontier, state.track === "openFrontier")}</td>
-              <td class="col-num">${renderScoreCell(m.poincareControl, state.track === "poincareControl")}</td>
-              <td class="col-num">${renderScoreCell(m.flawDetection, state.track === "flawDetection")}</td>
-              <td class="col-num"><span class="open-solved-pill ${m.hasBreakthrough ? "has-solve" : ""}">${escapeHtml(m.openSolved)}</span></td>
-              <td class="col-num" style="font-family:var(--font-mono); color:var(--ink-secondary);">${escapeHtml(m.avgCost)}</td>
+              <td><span class="badge badge-arch">${escapeHtml(m.organization)}</span></td>
+              <td class="col-num">${verifiedPill}</td>
+              <td class="col-num">${claimedPill}</td>
+              <td class="col-num"><span class="matrix-empty">${m.cmiAwardedCount} / 6</span></td>
+              <td>
+                <div class="model-cell">
+                  <span style="font-weight:500; color:var(--ink);">${escapeHtml(m.milestoneLabel)}</span>
+                  <span class="model-org">${escapeHtml(m.verificationSummary)}</span>
+                </div>
+              </td>
+              <td class="col-num" style="font-family:var(--font-mono); color:var(--ink-secondary); white-space:nowrap;">${escapeHtml(m.date)}</td>
             </tr>
           `;
         })
@@ -225,7 +243,7 @@
     }
 
     if (countEl) {
-      countEl.textContent = `Showing ${models.length} of ${state.data.models.length} benchmarked systems`;
+      countEl.textContent = `Showing ${models.length} of ${state.data.models.length} models`;
     }
 
     renderMatrix(models);
@@ -239,7 +257,7 @@
       tbody.innerHTML = `
         <tr>
           <td colspan="9" style="text-align:center; padding:34px; color:var(--ink-muted);">
-            No models match the current filter criteria.
+            No verified entries match the current filter criteria.
           </td>
         </tr>
       `;
@@ -249,8 +267,7 @@
     tbody.innerHTML = models
       .map((m, idx) => {
         const cells = PROBLEM_ORDER.map((pid) => {
-          const val = m.problems[pid] ?? 0;
-          return `<td class="col-num"><span class="heat-cell" style="${heatStyle(val)}">${val.toFixed(1)}%</span></td>`;
+          return `<td class="col-num">${matrixCellHtml(m.problems[pid])}</td>`;
         }).join("");
         return `
           <tr data-model-id="${escapeHtml(m.id)}" tabindex="0">
@@ -270,14 +287,6 @@
     $$("tr[data-model-id]", tbody).forEach((row) => {
       row.addEventListener("click", () => openModelModal(row.dataset.modelId));
     });
-  }
-
-  function statusBadgeClass(problem) {
-    const t = problem.statusType || (problem.status === "Unsolved" ? "unsolved" : "solved");
-    if (t === "ai-verified") return "badge-ai-verified";
-    if (t === "claimed") return "badge-claimed";
-    if (t === "solved") return "badge-solved";
-    return "badge-unsolved";
   }
 
   /* ------------------------------------------------------------------------
@@ -314,7 +323,7 @@
             </div>
             <p class="problem-summary">${escapeHtml(p.summary)}</p>
             <div class="problem-footer">
-              <span>Best AI Milestone: <strong class="problem-sota">${p.sotaScore.toFixed(1)}%</strong> (${p.subtasks} tasks)</span>
+              <span>Status: <strong class="problem-sota">${escapeHtml(p.aiStatusSummary)}</strong></span>
               <span class="problem-inspect">Inspect →</span>
             </div>
           </article>
@@ -393,22 +402,22 @@
       </div>
 
       <div>
-        <div class="modal-section-label">MillieniumBench 4-Tier Task Breakdown (${p.subtasks} Graded Subtasks)</div>
+        <div class="modal-section-label">MillieniumBench Verification Scope</div>
         <div class="tier-list">
           <div class="tier-item">
-            <strong>Tier 1 · Formalization Foundations</strong>
+            <strong>Stage 1 · Formalization Foundations</strong>
             <p>${formatInlineCode(p.tiers.formalization)}</p>
           </div>
           <div class="tier-item">
-            <strong>Tier 2 · Known Barriers &amp; Milestones</strong>
+            <strong>Stage 2 · Known Barriers &amp; Milestones</strong>
             <p>${formatInlineCode(p.tiers.milestones)}</p>
           </div>
           <div class="tier-item">
-            <strong>Tier 3 · Adversarial Flaw Audit</strong>
+            <strong>Stage 3 · Proof Fidelity &amp; Flaw Audit</strong>
             <p>${formatInlineCode(p.tiers.flawAudit)}</p>
           </div>
           <div class="tier-item">
-            <strong>Tier 4 · Full Prize-Level Goal</strong>
+            <strong>Stage 4 · Full Prize-Level Goal</strong>
             <p>${formatInlineCode(p.tiers.grandGoal)}</p>
           </div>
         </div>
@@ -438,52 +447,55 @@
 
     const breakdownCards = state.data.problems
       .map((p) => {
-        const score = m.problems[p.id] ?? 0;
+        const cell = m.problems[p.id];
         return `
           <div class="breakdown-card">
             <div class="breakdown-card-top">
               <span>${escapeHtml(p.shortName)}</span>
-              <strong>${score.toFixed(1)}%</strong>
             </div>
-            <div class="mini-bar" style="width:100%;">
-              <div class="mini-bar-fill" style="width:${Math.min(100, score)}%"></div>
-            </div>
+            <div>${matrixCellHtml(cell)}</div>
           </div>
         `;
       })
       .join("");
 
+    const statusBadgeCls =
+      m.leanVerifiedCount > 0
+        ? "badge-ai-verified"
+        : m.claimedPartialCount > 0
+          ? "badge-claimed"
+          : "badge-arch";
+
     const bodyHtml = `
       <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-        <span class="badge badge-arch">${escapeHtml(m.category)}</span>
-        ${m.openWeights ? '<span class="badge badge-open">Open Weights</span>' : '<span class="badge badge-arch">API / Proprietary</span>'}
-        <span class="open-solved-pill ${m.hasBreakthrough ? "has-solve" : ""}">Open Breakthroughs: ${escapeHtml(m.openSolved)}</span>
-        <span class="badge badge-arch">Est. Cost / Full Run: ${escapeHtml(m.avgCost)}</span>
+        <span class="badge badge-arch">${escapeHtml(m.organization)}</span>
+        ${m.openWeights ? '<span class="badge badge-open">Open Weights</span>' : ""}
+        <span class="badge ${statusBadgeCls}">${escapeHtml(m.verificationSummary)}</span>
       </div>
 
       <div class="tier-list">
         <div class="tier-item">
-          <strong>Overall Composite Score</strong>
-          <p style="font-family:var(--font-mono); font-size:1.3rem; font-weight:600; color:var(--gold); margin-top:4px;">${m.overall.toFixed(1)}%</p>
+          <strong>Independently Lean-Verified Proofs</strong>
+          <p style="font-family:var(--font-mono); font-size:1.25rem; font-weight:600; color:var(--teal); margin-top:4px;">${m.leanVerifiedCount} / 6</p>
         </div>
         <div class="tier-item">
-          <strong>Adversarial Flaw Detection</strong>
-          <p style="font-family:var(--font-mono); font-size:1.3rem; font-weight:600; color:var(--teal); margin-top:4px;">${m.flawDetection.toFixed(1)}%</p>
+          <strong>Claimed / Partial Breakthroughs</strong>
+          <p style="font-family:var(--font-mono); font-size:1.25rem; font-weight:600; color:var(--gold); margin-top:4px;">${m.claimedPartialCount}</p>
         </div>
       </div>
 
       <div>
-        <div class="modal-section-label">Evaluation Notes &amp; Verified Highlights</div>
-        <p style="margin:0; font-size:0.92rem; color:var(--ink-secondary);">${escapeHtml(m.highlights)}</p>
+        <div class="modal-section-label">Verification Details &amp; Public Record</div>
+        <p style="margin:0; font-size:0.92rem; color:var(--ink-secondary);">${formatInlineCode(m.highlights)}</p>
       </div>
 
       <div>
-        <div class="modal-section-label">Per-Problem Mastery Across All 7 Clay Problems</div>
+        <div class="modal-section-label">Status Across All 7 Clay Problems</div>
         <div class="model-breakdown-grid">${breakdownCards}</div>
       </div>
     `;
 
-    openModal(`${m.organization} · Evaluated ${m.date}`, m.name, bodyHtml);
+    openModal(`${m.organization} · Updated ${m.date}`, m.name, bodyHtml);
   }
 
   /* ------------------------------------------------------------------------
@@ -544,7 +556,7 @@
   }
 
   /* ------------------------------------------------------------------------
-     Subtle Mathematical Hero Backdrop (Riemann Critical Strip / Harmonic Curves)
+     Subtle Mathematical Hero Backdrop
      ------------------------------------------------------------------------ */
   function initHeroCanvas() {
     const canvas = $("#math-canvas");
@@ -576,7 +588,6 @@
       const curveColor = isDark ? "rgba(223, 176, 89, 0.22)" : "rgba(169, 120, 34, 0.22)";
       const accentColor = isDark ? "rgba(62, 194, 174, 0.18)" : "rgba(20, 116, 103, 0.16)";
 
-      // Subtle vertical critical-line axis on the right half
       const axisX = width * 0.78;
       ctx.strokeStyle = gridColor;
       ctx.lineWidth = 1;
@@ -588,7 +599,6 @@
         ctx.stroke();
       }
 
-      // Harmonic wave trajectories inspired by ζ(1/2 + it) & Navier-Stokes streamlines
       for (let c = 0; c < 4; c++) {
         ctx.beginPath();
         ctx.strokeStyle = c === 0 ? curveColor : accentColor;
@@ -624,12 +634,9 @@
      Controls Wiring & Data Loading
      ------------------------------------------------------------------------ */
   function bindControls() {
-    // Track tabs
     $$(".tab-btn[data-track]").forEach((btn) => {
       btn.addEventListener("click", () => {
         state.track = btn.dataset.track;
-        state.sortKey = state.track;
-        state.sortDir = "desc";
         $$(".tab-btn[data-track]").forEach((b) => {
           const active = b === btn;
           b.classList.toggle("active", active);
@@ -639,7 +646,6 @@
       });
     });
 
-    // View toggle (Table vs Heatmap)
     $$(".switch-btn[data-view]").forEach((btn) => {
       btn.addEventListener("click", () => {
         state.view = btn.dataset.view;
@@ -656,28 +662,19 @@
       });
     });
 
-    // Search input
     $("#model-search")?.addEventListener("input", (e) => {
       state.search = e.target.value;
       renderLeaderboard();
     });
 
-    // Category filter pills
-    $$(".filter-bar .pill[data-category]").forEach((pill) => {
+    $$(".filter-bar .pill[data-provider]").forEach((pill) => {
       pill.addEventListener("click", () => {
-        state.category = pill.dataset.category;
-        $$(".filter-bar .pill[data-category]").forEach((p) => p.classList.toggle("active", p === pill));
+        state.provider = pill.dataset.provider;
+        $$(".filter-bar .pill[data-provider]").forEach((p) => p.classList.toggle("active", p === pill));
         renderLeaderboard();
       });
     });
 
-    // Open weights checkbox
-    $("#open-weights-only")?.addEventListener("change", (e) => {
-      state.openWeightsOnly = e.target.checked;
-      renderLeaderboard();
-    });
-
-    // Sortable table columns
     $$(".leaderboard-table th.sortable").forEach((th) => {
       th.addEventListener("click", () => {
         const key = th.dataset.sort;
@@ -691,7 +688,6 @@
       });
     });
 
-    // Problem filter pills
     $$("#problem-filters .pill").forEach((pill) => {
       pill.addEventListener("click", () => {
         state.problemFilter = pill.dataset.problemFilter;
@@ -700,7 +696,6 @@
       });
     });
 
-    // Modal closing
     $("#modal-close")?.addEventListener("click", closeModal);
     $("#detail-modal")?.addEventListener("click", (e) => {
       if (e.target === e.currentTarget) closeModal();
@@ -732,13 +727,12 @@
 
     const metaEl = $("#dataset-meta");
     if (metaEl && state.data.benchmark) {
-      metaEl.textContent = `Live Standings · v${state.data.benchmark.version} · Updated ${state.data.benchmark.lastUpdated}`;
+      metaEl.textContent = `Verified Public Record · v${state.data.benchmark.version} · Updated ${state.data.benchmark.lastUpdated}`;
     }
 
     renderLeaderboard();
     renderProblems();
 
-    // Render KaTeX once deferred script loads
     if (window.katex) {
       renderMathInContainer(document);
     } else {

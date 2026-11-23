@@ -122,6 +122,7 @@
       <a href="#methodology">Methodology</a>
       <a href="#submit">Submit Model</a>
       <a href="#cite">Citation</a>
+      <a href="https://github.com/JadenMajid/millieniumbench" target="_blank" rel="noopener noreferrer">GitHub Repository ↗</a>
     </div>
   </header>
 
@@ -162,22 +163,22 @@
           <div class="stat-card" role="listitem">
             <span class="stat-label">Clay Problems</span>
             <span class="stat-value">7</span>
-            <span class="stat-meta">1 CMI solved · 2 AI claimed · 1 partial · 3 open</span>
+            <span class="stat-meta">1 CMI solved · 6 open prizes</span>
           </div>
           <div class="stat-card" role="listitem">
-            <span class="stat-label">2026 AI Breakthroughs</span>
-            <span class="stat-value accent-teal">2 / 6</span>
-            <span class="stat-meta">Riemann (Lean) · Navier–Stokes (Forced)</span>
+            <span class="stat-label">Lean-Verified AI Proofs</span>
+            <span class="stat-value accent-teal">1</span>
+            <span class="stat-meta">Riemann Hypothesis · Pending CMI review</span>
+          </div>
+          <div class="stat-card" role="listitem">
+            <span class="stat-label">Claimed / Partial AI</span>
+            <span class="stat-value gold-text">2</span>
+            <span class="stat-meta">Navier–Stokes (Forced) · Yang–Mills (Exist.)</span>
           </div>
           <div class="stat-card" role="listitem">
             <span class="stat-label">CMI Prizes Pending</span>
             <span class="stat-value">$6M</span>
             <span class="stat-meta">Official award requires 2-yr peer review</span>
-          </div>
-          <div class="stat-card" role="listitem">
-            <span class="stat-label">Graded Subtasks</span>
-            <span class="stat-value">160</span>
-            <span class="stat-meta">Lean 4 + 160 flawed-proof audits</span>
           </div>
         </div>
       </div>
@@ -196,7 +197,7 @@
               <circle cx="12" cy="12" r="10" />
               <path d="M12 8v4M12 16h.01" />
             </svg>
-            <span id="dataset-meta">Preview Baselines · v0.1.0</span>
+            <span id="dataset-meta">Verified Public Record · v0.2.0</span>
           </div>
         </div>
 
@@ -212,24 +213,24 @@
 
         <!-- Controls Toolbar -->
         <div class="toolbar">
-          <div class="track-tabs" role="tablist" aria-label="Leaderboard track">
-            <button type="button" class="tab-btn active" data-track="overall" role="tab" aria-selected="true">
-              Overall Composite
+          <div class="track-tabs" role="tablist" aria-label="Verification status filter">
+            <button type="button" class="tab-btn active" data-track="all" role="tab" aria-selected="true">
+              All Models
             </button>
-            <button type="button" class="tab-btn" data-track="openFrontier" role="tab" aria-selected="false">
-              Open Frontier (6)
+            <button type="button" class="tab-btn" data-track="verified" role="tab" aria-selected="false">
+              Lean-Verified Full Proofs
             </button>
-            <button type="button" class="tab-btn" data-track="poincareControl" role="tab" aria-selected="false">
-              Poincaré Control
+            <button type="button" class="tab-btn" data-track="claimed" role="tab" aria-selected="false">
+              Claimed / Partial
             </button>
-            <button type="button" class="tab-btn" data-track="flawDetection" role="tab" aria-selected="false">
-              Flaw Audit
+            <button type="button" class="tab-btn" data-track="open" role="tab" aria-selected="false">
+              No Proof Yet (0 / 6)
             </button>
           </div>
 
           <div class="view-switch" role="group" aria-label="Visualization mode">
             <button type="button" class="switch-btn active" data-view="table">Table View</button>
-            <button type="button" class="switch-btn" data-view="matrix">7-Problem Heatmap</button>
+            <button type="button" class="switch-btn" data-view="matrix">7-Problem Status Matrix</button>
           </div>
         </div>
 
@@ -242,22 +243,18 @@
             <input
               type="search"
               id="model-search"
-              placeholder="Filter models or organizations…"
-              aria-label="Filter models or organizations"
+              placeholder="Filter models, providers, or milestones…"
+              aria-label="Filter models, providers, or milestones"
             />
           </div>
 
-          <div class="filter-pills" role="group" aria-label="Model architecture filter">
-            <button type="button" class="pill active" data-category="all">All</button>
-            <button type="button" class="pill" data-category="Hybrid (LLM + Lean 4)">Hybrid + Lean 4</button>
-            <button type="button" class="pill" data-category="Theorem Prover / Agent">Theorem Prover</button>
-            <button type="button" class="pill" data-category="Frontier LLM">Frontier LLM</button>
+          <div class="filter-pills" role="group" aria-label="Provider filter">
+            <button type="button" class="pill active" data-provider="all">All</button>
+            <button type="button" class="pill" data-provider="Anthropic">Anthropic</button>
+            <button type="button" class="pill" data-provider="OpenAI">OpenAI</button>
+            <button type="button" class="pill" data-provider="Google DeepMind">Google DeepMind</button>
+            <button type="button" class="pill" data-provider="DeepSeek">DeepSeek</button>
           </div>
-
-          <label class="toggle-check">
-            <input type="checkbox" id="open-weights-only" />
-            <span>Open weights only</span>
-          </label>
         </div>
 
         <!-- Leaderboard Table View -->
@@ -267,14 +264,13 @@
               <thead>
                 <tr>
                   <th class="col-rank">#</th>
-                  <th class="sortable" data-sort="name">Model / System</th>
-                  <th>Architecture</th>
-                  <th class="sortable col-num" data-sort="overall">Composite</th>
-                  <th class="sortable col-num" data-sort="openFrontier">Open Frontier</th>
-                  <th class="sortable col-num" data-sort="poincareControl">Poincaré</th>
-                  <th class="sortable col-num" data-sort="flawDetection">Flaw Audit</th>
-                  <th class="col-num">Open Solved</th>
-                  <th class="col-num">Est. Cost</th>
+                  <th class="sortable" data-sort="name">Model</th>
+                  <th class="sortable" data-sort="organization">Provider</th>
+                  <th class="sortable col-num" data-sort="leanVerifiedCount">Lean-Verified</th>
+                  <th class="sortable col-num" data-sort="claimedPartialCount">Claimed / Partial</th>
+                  <th class="col-num">CMI Awarded</th>
+                  <th>Key Milestone</th>
+                  <th class="sortable col-num" data-sort="date">Date</th>
                 </tr>
               </thead>
               <tbody id="leaderboard-tbody">
@@ -283,12 +279,12 @@
             </table>
           </div>
           <div class="table-footer">
-            <span>Click any model row to inspect per-problem scores and verified Lean 4 milestones.</span>
+            <span>Rankings track underlying AI models regardless of harness or proof environment. Click any row for details.</span>
             <span id="result-count"></span>
           </div>
         </div>
 
-        <!-- 7-Problem Heatmap View -->
+        <!-- 7-Problem Status Matrix View -->
         <div class="card table-card" id="leaderboard-matrix-view" hidden>
           <div class="table-scroll">
             <table class="leaderboard-table matrix-table">
@@ -311,8 +307,8 @@
             </table>
           </div>
           <div class="table-footer">
-            <span>★ Poincaré Conjecture is the solved control task (Grigori Perelman, 2003). Higher color intensity = higher milestone mastery (%).</span>
-            <span>Scale: 0% – 100%</span>
+            <span>★ Poincaré Conjecture is the CMI-solved control problem (Grigori Perelman, 2003).</span>
+            <span>Status: Lean-Verified · Claimed · Partial · —</span>
           </div>
         </div>
       </div>
@@ -368,51 +364,45 @@
 
         <div class="pipeline-grid">
           <article class="pipeline-card">
-            <span class="step-num">Tier 1 · 25%</span>
+            <span class="step-num">Stage 1</span>
             <h3>Formalization Foundations</h3>
             <p>
-              Models formalize core definitions, spaces, and prerequisite theorems for each problem
-              inside a pinned <code>Mathlib4</code> environment with zero <code>sorry</code> placeholders.
+              Core definitions, spaces, and target theorem statements are anchored to standard
+              <code>Mathlib4</code> definitions with zero <code>sorry</code> placeholders or custom axioms.
             </p>
           </article>
           <article class="pipeline-card">
-            <span class="step-num">Tier 2 · 35%</span>
-            <h3>Barrier &amp; Partial Milestones</h3>
+            <span class="step-num">Stage 2</span>
+            <h3>Independent Kernel Check</h3>
             <p>
-              Models independently reconstruct landmark partial results and obstruction barriers
-              (e.g., Razborov–Rudich, Hardy’s critical-line theorem, Gross–Zagier, Beale–Kato–Majda).
+              Submitted proof libraries must compile cleanly under the official Lean 4 kernel and
+              independent third-party checkers (e.g., <em>con-leche</em>, <em>con-ron</em>).
             </p>
           </article>
           <article class="pipeline-card">
-            <span class="step-num">Tier 3 · 20%</span>
-            <h3>Adversarial Flaw Audit</h3>
+            <span class="step-num">Stage 3</span>
+            <h3>Statement Fidelity Audit</h3>
             <p>
-              Given 160 historical and synthetic flawed Millennium "proofs," systems must pinpoint the
-              exact first invalid deduction—testing mathematical rigor against plausible-sounding errors.
+              Mathematicians audit natural-language-to-Lean alignment—ensuring boundary conditions,
+              forcing terms, and definitions faithfully match the Clay Mathematics Institute statement.
             </p>
           </article>
           <article class="pipeline-card">
-            <span class="step-num">Tier 4 · 20% + Prize Gate</span>
-            <h3>Poincaré Control &amp; Open Frontier</h3>
+            <span class="step-num">Stage 4</span>
+            <h3>CMI 2-Year Peer Review</h3>
             <p>
-              End-to-end reconstruction of Perelman’s solved Poincaré proof calibrates deep proof
-              planning, while open-problem proof attempts pass Lean 4 kernel checks plus human referee audit.
+              Under Clay Mathematics Institute rules, official resolution requires publication in a
+              peer-reviewed venue and two years of global mathematical community acceptance.
             </p>
           </article>
         </div>
 
         <div class="formula-banner">
-          <div class="formula-banner-label">Composite Score Formulation</div>
-          <div
-            class="formula-banner-math math-render"
-            data-latex="S_{\text{MB}} = 0.25\,T_{\text{form}} + 0.35\,T_{\text{mile}} + 0.20\,T_{\text{audit}} + 0.20\,T_{\text{poincar\'e}} \quad\text{(plus } +100\text{ Prize Gate per verified open proof)}"
-          >
-            S_MB = 0.25·T_form + 0.35·T_mile + 0.20·T_audit + 0.20·T_poincaré (plus +100 Prize Gate per verified open proof)
-          </div>
-          <div class="verification-rules">
+          <div class="formula-banner-label">Verification Standards</div>
+          <div class="verification-rules" style="padding-top: 6px;">
             <span><strong>Zero-Axiom Rule:</strong> Custom axioms or <code>sorry</code> auto-fail kernel checks.</span>
-            <span><strong>Clean Sandbox:</strong> No web search or arXiv retrieval during evaluation runs.</span>
-            <span><strong>Reproducible Traces:</strong> Every leaderboard entry publishes full Lean proof logs.</span>
+            <span><strong>Fidelity Check:</strong> Machine compilation alone does not replace statement-alignment review.</span>
+            <span><strong>No Synthetic Scores:</strong> Only publicly verifiable real-world attempts appear on the board.</span>
           </div>
         </div>
       </div>
@@ -436,10 +426,10 @@
               traces via Pull Request.
             </p>
             <ul class="checklist">
-              <li>Pinned <code>Lean 4.14.0</code> + <code>Mathlib4</code> Docker image for deterministic replay</li>
-              <li>Automated GitHub Actions CI checks every PR submission against the Lean kernel</li>
-              <li>Open dataset of 160 formal subtasks and 160 annotated flawed proof manuscripts</li>
-              <li>MIT-licensed harness and CC-BY-4.0 benchmark metadata</li>
+              <li>Pinned <code>Lean 4</code> + <code>Mathlib4</code> verification targets for deterministic replay</li>
+              <li>Automated GitHub Actions CI validates every PR submission to <code>data/benchmark.json</code></li>
+              <li>Requires public Lean 4 repository, manuscript, or independent kernel verification link</li>
+              <li>MIT-licensed website &amp; open benchmark metadata</li>
             </ul>
             <div class="submit-cta-row">
               <a
@@ -499,22 +489,20 @@ git commit -m "Add MillieniumBench evaluation for Your-Model"
 git push origin submit/your-model</code></pre>
 
             <pre class="code-block" id="code-schema" hidden><code>{
-  "id": "your-org-prover-v1",
-  "name": "YourProver-v1 + Lean4",
+  "id": "your-model-id",
+  "name": "Your Model Name",
   "organization": "Your Lab",
-  "category": "Hybrid (LLM + Lean 4)",
-  "openWeights": true,
+  "openWeights": false,
   "date": "2026-11-23",
-  "leanCommit": "v4.14.0",
-  "openSolved": "0 / 6",
+  "leanVerifiedCount": 1,
+  "claimedPartialCount": 0,
+  "cmiAwardedCount": 0,
+  "track": "verified",
+  "milestoneLabel": "Target Problem",
+  "verificationSummary": "Lean 4 kernel &amp; independent checker status",
   "problems": {
-    "p-vs-np": 41.0,
-    "riemann": 44.5,
-    "yang-mills": 22.0,
-    "navier-stokes": 33.2,
-    "hodge": 28.4,
-    "bsd": 39.1,
-    "poincare": 52.8
+    "p-vs-np": { "label": "—", "state": "none" },
+    "riemann": { "label": "Lean-Verified", "state": "verified" }
   }
 }</code></pre>
           </div>
@@ -544,7 +532,7 @@ git push origin submit/your-model</code></pre>
   author       = {MillieniumBench Contributors},
   year         = {2026},
   howpublished = {\url{https://github.com/JadenMajid/millieniumbench}},
-  note         = {Version 0.1.0-preview, Lean 4.14 Formal Verification Harness}
+  note         = {Version 0.2.0, Verified Millennium Prize AI Tracker}
 }</code></pre>
         </div>
 
