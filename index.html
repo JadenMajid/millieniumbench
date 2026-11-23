@@ -8,12 +8,35 @@
     name="description"
     content="MillieniumBench evaluates frontier AI models and automated theorem provers on the seven Clay Mathematics Institute Millennium Prize Problems using Lean 4 formal verification, milestone proofs, and adversarial flaw detection."
   />
+  <link rel="canonical" href="https://jmajid.com/millieniumbench/" />
+  <meta property="og:site_name" content="MillieniumBench" />
+  <meta property="og:url" content="https://jmajid.com/millieniumbench/" />
   <meta property="og:title" content="MillieniumBench — Clay Millennium Problems AI Benchmark" />
   <meta
     property="og:description"
     content="Measuring AI progress toward solving the seven $1,000,000 Clay Millennium Prize Problems via Lean 4 formal verification and rigorous mathematical benchmarks."
   />
   <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://jmajid.com/millieniumbench/assets/thumbnail.jpg" />
+  <meta property="og:image:secure_url" content="https://jmajid.com/millieniumbench/assets/thumbnail.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta
+    property="og:image:alt"
+    content="MillieniumBench — Clay Millennium Prize Problems: Evaluating Frontier AI on Humanity's Hardest Mathematics"
+  />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MillieniumBench — Clay Millennium Problems AI Benchmark" />
+  <meta
+    name="twitter:description"
+    content="Measuring AI progress toward solving the seven $1,000,000 Clay Millennium Prize Problems via Lean 4 formal verification and rigorous mathematical benchmarks."
+  />
+  <meta name="twitter:image" content="https://jmajid.com/millieniumbench/assets/thumbnail.jpg" />
+  <meta
+    name="twitter:image:alt"
+    content="MillieniumBench — Clay Millennium Prize Problems: Evaluating Frontier AI on Humanity's Hardest Mathematics"
+  />
   <link
     rel="icon"
     type="image/svg+xml"
@@ -194,7 +217,7 @@
         </div>
 
         <p class="section-lead">
-          Tracking frontier AI models on the seven Clay Millennium Prize Problems across two
+          Tracking frontier AI models on the six open Clay Millennium Prize Problems across two
           clear statuses: <strong>Claimed</strong> (publicly announced proof or resolution) and
           <strong>CMI Verified</strong> (officially accepted by the Clay Mathematics Institute
           after peer-reviewed publication and its mandatory two-year scrutiny window). As of
@@ -223,7 +246,7 @@
 
           <div class="view-switch" role="group" aria-label="Visualization mode">
             <button type="button" class="switch-btn active" data-view="table">Table View</button>
-            <button type="button" class="switch-btn" data-view="matrix">7-Problem Status Matrix</button>
+            <button type="button" class="switch-btn" data-view="matrix">6-Problem Status Matrix</button>
           </div>
         </div>
 
@@ -276,7 +299,7 @@
           </div>
         </div>
 
-        <!-- 7-Problem Status Matrix View -->
+        <!-- 6-Problem Status Matrix View -->
         <div class="card table-card" id="leaderboard-matrix-view" hidden>
           <div class="table-scroll">
             <table class="leaderboard-table matrix-table">
@@ -290,7 +313,6 @@
                   <th class="col-num">Navier–Stokes</th>
                   <th class="col-num">Hodge</th>
                   <th class="col-num">BSD</th>
-                  <th class="col-num">Poincaré ★</th>
                 </tr>
               </thead>
               <tbody id="matrix-tbody">
@@ -299,7 +321,7 @@
             </table>
           </div>
           <div class="table-footer">
-            <span>★ Poincaré Conjecture is the CMI-verified control problem (Grigori Perelman, 2003).</span>
+            <span>Evaluates only the 6 open Clay Millennium Prize Problems (Poincaré Conjecture excluded; solved by G. Perelman, 2003).</span>
             <span>Status: CMI Verified · Claimed · Partial · —</span>
           </div>
         </div>
