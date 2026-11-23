@@ -35,21 +35,12 @@ Under Clay Mathematics Institute rules, official Millennium Prize awards require
 
 ## Deploying to GitHub Pages
 
-1. Create a new GitHub repository (e.g. `millieniumbench`).
-2. Push this directory to the `main` branch:
+1. Push changes to the `master` branch:
    ```bash
-   git init
-   git add .
-   git commit -m "Initial MillieniumBench GitHub Pages site"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/millieniumbench.git
-   git push -u origin main
+   git push origin master
    ```
-3. In your repository on GitHub, open **Settings → Pages**.
-4. Under **Build and deployment → Source**, select **GitHub Actions**.
-5. The included [`.github/workflows/pages.yml`](.github/workflows/pages.yml) workflow will validate `data/benchmark.json` and deploy the site automatically on every push to `main`.
-
-> **Tip:** Replace the placeholder `https://github.com/millieniumbench/millieniumbench` links in `index.html` with your own GitHub repository URL before publishing.
+2. In your repository on GitHub, open **Settings → Pages** and ensure **Build and deployment → Source** is set to **GitHub Actions**.
+3. The included [`.github/workflows/static.yml`](.github/workflows/static.yml) workflow deploys the static site automatically on every push to `master` (or via manual `workflow_dispatch`).
 
 ---
 
